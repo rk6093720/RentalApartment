@@ -161,9 +161,12 @@ const postResetPassword = async (req, res) => {
     }
 }
 const Logout = async(req,res)=>{
+    const { email } = req.body;
    try {
-    const {email}= req.body;
     const id = await AdminModal.findOne({_id:id})
+    if(!id){
+        return res.status(404).json({ message: 'Admin not found' });
+    }
     const logoutTime = new Date();
     await UserSession.create({ id,email,logoutTime});
     const transporter = nodemailer.createTransport({
@@ -183,13 +186,13 @@ const Logout = async(req,res)=>{
        transporter.sendMail(mailOptions, function (error, info) {
            if (error) {
                console.log(error);
-               return res.status(500).json({ message: 'Error sending email confirmation' });
+               return res.status(500).json({ message: '1Error sending email confirmation' });
            } else {
-               return res.status(200).json({ message: 'Logged out successfully and email sent' });
+               return res.status(200).json({ message: '2Logged out successfully and email sent' });
            }
        });
    } catch (error) {
-       return res.status(500).json({ message: 'Error sending email confirmation' });
+       return res.status(500).json({ message: '3Error sending email confirmation' });
    }
 }
 module.exports={
