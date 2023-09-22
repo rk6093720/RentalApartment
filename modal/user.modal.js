@@ -5,10 +5,10 @@ const userSchema = new mongoose.Schema({
         firstName:{type:String,required:true},
         lastName:{type:String,required:true},
          adharCard:{type:String,required:true},
-      country: { type: mongoose.Schema.Types.ObjectId, ref: 'Country' },
-      state: { type: mongoose.Schema.Types.ObjectId, ref: 'State' },
-     city: { type: mongoose.Schema.Types.ObjectId, ref: 'City' },
-     postalCode: { type: mongoose.Schema.Types.ObjectId, ref: 'PostalCode' }
+      country: { type:String },
+      state: { type:String},
+     city: { type:String},
+     postalCode: { type:String }
 
 }) 
 

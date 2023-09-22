@@ -6,8 +6,9 @@ adminRoute.get("/",(req,res)=>{
       res.send("welcome to home page")
     console.log("welcome to home page")
 })
-adminRoute.post("/signup",Register)
+// adminRoute.post("/signup",Register)
 adminRoute.post("/login",Login);
+
 adminRoute.post("/forget-password",forgetPassword);
 adminRoute.get("/reset-password/:id/:token",resetPassword);
 adminRoute.post("/reset-password/:id/:token",postResetPassword);
