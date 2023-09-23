@@ -69,10 +69,10 @@ const forgetPassword= async(req,res)=>{
         }
         const secret = jwtSecret  + oldUser.password;
         const token = jwt.sign({ email: oldUser.email, id: oldUser._id },secret, {
-            expiresIn: "5m",
+            expiresIn: "2m",
         });
-        const setUserToken = await AdminModal.findByIdAndUpdate({_id:oldUser._id},{token:token})
-        const link = `http://localhost:${port}/admin/reset-password/${oldUser._id}/${token}`;
+        const setUserToken = await AdminModal.findByIdAndUpdate({_id:oldUser._id},{verifyToken:token,new:true})
+        const link = `http://localhost:3000/reset-password/${oldUser._id}/${token}`;
         if(setUserToken){
         var transporter = nodemailer.createTransport({
             service: "gmail",
@@ -83,7 +83,7 @@ const forgetPassword= async(req,res)=>{
         });
    var mailOptions = {
             from:"rk6093720@gmail.com",
-            to: "rohit@yopmail.com",
+            to: email,
             subject: "Password Reset",
             text: link,
         };
@@ -97,8 +97,6 @@ const forgetPassword= async(req,res)=>{
             }
         });
     }
-        console.log(link);
-        // console.log(token);
      return   res.send({link, status:"success"});
     } catch(e){
         res.status(500).send({e:"do not sent on email",  status: "error" });
@@ -107,24 +105,25 @@ const forgetPassword= async(req,res)=>{
 // get request for reset password 
 const resetPassword= async(req,res)=>{
     const { id, token } = req.params;
+    console.log(id,token);
     // console.log(req.params);
-    const oldUser = await AdminModal.findOne({ _id: id,token:token });
+    const oldUser = await AdminModal.findOne({ _id: id,verifyToken:token });
     if (!oldUser) {
         return res.json({ status: "Admin Not Exists!!" });
     }
     const secret = jwtSecret + oldUser.password;
     try {
         const verify = jwt.verify(token, secret);
-         res.send({email:verify.email,status:"verified"})
+     return    res.send({email:verify.email,id:verify._id,status:"verified"})
     } catch (error) {
-        res.send("Not Verified");
+     return   res.send("Not Verified");
     }
 }
 //post request of forget-password
 const postResetPassword = async (req, res) => {
     const { id, token } = req.params;
     const { password } = req.body;
-   const oldUser = await AdminModal.findOne({ _id: id ,token:token});
+   const oldUser = await AdminModal.findOne({ _id: id ,verifyToken:token});
     if (!oldUser) {
         return res.json({ status: "Admin Not Exists!!" });
     }
@@ -143,10 +142,10 @@ const postResetPassword = async (req, res) => {
             }
         );
 
-        res.send( { email: verify.email, status: "verified" });
+     return   res.send( { email: verify.email,verifyToken:verify.token,id:verify._id, status: "verified" });
     } catch (error) {
         console.log(error);
-        res.json({ status: "Something Went Wrong" });
+       return res.json({ status: "Something Went Wrong" });
     }
 }
 const Logout = async(req,res)=>{
