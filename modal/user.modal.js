@@ -4,11 +4,12 @@ const userSchema = new mongoose.Schema({
         password:{type:String,required:true},
         firstName:{type:String,required:true},
         lastName:{type:String,required:true},
-         adharCard:{type:String,required:true},
-      country: { type:String },
-      state: { type:String},
-     city: { type:String},
-     postalCode: { type:String }
+        adharCard:{type:String,required:true},
+        address:{type:String,required:true},
+        country: { type:String },
+        state: { type:String},
+        city: { type:String},
+        postalCode: { type:String }
 
 }) 
 
