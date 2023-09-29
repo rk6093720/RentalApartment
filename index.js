@@ -9,7 +9,6 @@ require('dotenv').config();
 const port = process.env.PORT || 8000;
 app.use(cors());
 app.use(express.json());
-
 app.use("/admin",adminRoute);
 app.use("/users",userRoute);
 app.use("/landlord",landLordRouter);

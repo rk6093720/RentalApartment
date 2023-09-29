@@ -1,100 +1,165 @@
 const { LandlordModal } = require("../modal/landLord.modal");
 const multer = require("multer");
-const moment=require("moment");
-const getLandLord = async(req,res)=>{
-    try {
-        const user = await LandlordModal.find({});
-        res.status(201).send({ Landlord: user, status: "success" });
-    } catch (error) {
-        console.log(error);
-        res.status(201).send({ status: "error" });
-    }
-}
+const path = require("path");
+const fs = require("fs/promises");
+const { v4: uuidv4 } = require('uuid');
+const moment = require("moment");
 
-//post request for landLord;
-const postLandLord = async (req, res) => {
-    const { firstName, LastName, email, city, phone, country, _id, state, postalCode, address, registerDate, propertyName, countApartment, adharCard, propertyCode } = req.body;
+const getLandLord = async (req, res) => {
     try {
-        let date = moment(new Date()).format("YYYY-MM-DD hh:mm:ss")
-        // Check if a user with the same email or _id exists
+        const users = await LandlordModal.find({});
+        res.status(200).json({ Landlords: users, status: "success" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ status: "error", message: "Internal server error" });
+    }
+};
+
+const postLandLord = async (req, res) => {
+    const {
+        firstName,
+        LastName,
+        email,
+        city,
+        phone,
+        country,
+        _id,
+        state,
+        postalCode,
+        address,
+        propertyName,
+        countApartment,
+        adharCard,
+        propertyCode
+    } = req.body;
+
+    try {
         const existingUser = _id
             ? await LandlordModal.findById(_id)
             : await LandlordModal.findOne({ email });
-            if (existingUser) {
+
+        if (existingUser) {
             return res.status(400).json({ status: 'error', message: 'User already exists' });
-           }
-        // Check if req.file exists and get its filename
+        }
+
+        const date = moment().format("YYYY-MM-DD HH:mm:ss");
+
         let image = null;
         if (req.file) {
-            image = req.file.filename;
+            const uniqueFilename = uuidv4() + path.extname(req.file.originalname);
+            const imagePath = path.join(__dirname, '..', 'images', uniqueFilename);
+
+            await fs.rename(req.file.path, imagePath);
+            image = uniqueFilename; // Save the unique filename to the database
         }
-    
-       // Create a new Landlord instance
+        //  console.log(image)
         const newUser = {
-            firstName:firstName,
-            LastName:LastName,
-            email:email,
-            city:city,
-            phone:phone,
-            country:country,
-            state:state,
-            postalCode:postalCode,
-            address:address,
-            registerDate:date,
-            propertyName:propertyName,
-            countApartment:countApartment,
-            adharCard:adharCard,
-            document:image,
-            propertyCode:propertyCode,
-        }
-        const newLandlord = await LandlordModal(newUser)
-         // Save the new user to the database
+            firstName,
+            LastName,
+            email,
+            city,
+            phone,
+            country,
+            state,
+            postalCode,
+            address,
+            propertyName,
+            countApartment,
+            adharCard,
+            document: image, // Store the unique filename
+            propertyCode,
+            registerDate: date,
+        };
+
+        const newLandlord = new LandlordModal(newUser);
         await newLandlord.save();
-        // Respond with a success message and the created user
+
         res.status(201).json({ status: 'success', Landlord: newUser });
     } catch (error) {
         console.error(error);
-         // Handle the error and send an appropriate response
         res.status(500).json({ status: 'error', message: 'Internal server error' });
     }
 };
+
+const updateLandlord=async(req,res)=>{
+    const {id}= req.params;
+    const { firstName,
+        LastName,
+        email,
+        phone,
+        state,
+        country,
+        city,
+        countApartment,
+        postalCode,
+        address,
+        registerDate,
+        propertyName,
+        adharCard } = req?.body;
+        const newLandlord={
+            firstName,
+            LastName,
+            email,
+            address,
+            adharCard,
+            propertyName,
+            registerDate,
+            postalCode,
+            phone,
+            countApartment,
+            country,
+            state,
+            city
+        }
+    try {
+        await LandlordModal.findOneAndUpdate({ _id: id },newLandlord,{new:true});
+        res.status(200).json({status:"success",msg:"edit successfully",editLandlord:newLandlord});
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({msg:"something went wrong",status:"error"})
+    }
+}
+
+const deleteLandlord =async(req,res)=>{
+     const {id}= req.params;
+     try {
+        const deleteLandlord= await LandlordModal.findOneAndDelete({_id:id});
+        res.status(200).json({status:"success",deleteLandlord})
+     } catch (error) {
+        console.log(error);
+       res.status(500).json({status:"error"});
+     }
+}
+// Multer configuration for file uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        return cb(null, "./images");
+        cb(null, "./images");
     },
     filename: function (req, file, cb) {
-        const uniqueSuffix = `image-${Date.now()}`;
-        return cb(null, uniqueSuffix + file.originalname);
+        const uniqueSuffix = uuidv4() + path.extname(file.originalname);
+        cb(null, uniqueSuffix);
     },
 });
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: '1000000' },
-    fileFilter: (req, file, cb) => {
-        const check = file.mimetype.startsWith("image");
-        const fileTypes = /jpeg|jpg|png|gif/
-        const mimeType = fileTypes.test(file.mimetype)
-        const extname = fileTypes.test(file.originalname)
 
-        if (mimeType && extname && check) {
-            return cb(null, true)
+const upload = multer({
+    storage,
+    limits: { fileSize: 1000000 }, // 1 MB limit
+    fileFilter: (req, file, cb) => {
+        const fileTypes = ['.jpeg', '.jpg', '.png', '.gif'];
+        const extname = path.extname(file.originalname).toLowerCase();
+
+        if (fileTypes.includes(extname)) {
+            return cb(null, true);
         }
-        cb('Give proper files formate to upload')
+
+        cb('Invalid file format. Only JPEG, JPG, PNG, and GIF files are allowed');
     }
 }).single("document");
 
-const updateLandLord = async(req,res)=>{
-    const {id}= req.params;
-    try {
-        
-    } catch (error) {
-        
-    }
-}
-
-module.exports={
+module.exports = {
     getLandLord,
     postLandLord,
     upload,
-    updateLandLord
-}
+    updateLandlord,
+    deleteLandlord
+};
