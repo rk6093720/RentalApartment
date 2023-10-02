@@ -4,7 +4,33 @@ const path = require("path");
 const fs = require("fs/promises");
 const { v4: uuidv4 } = require('uuid');
 const moment = require("moment");
-
+const filterLandlord= async(req,res)=>{
+  try {
+    const {firstName,LastName,email,phone}= req?.query;
+    const search={};
+    if(firstName){
+        search.firstName={$regex:firstName,$options:"i"};
+    }
+    if(LastName){
+        search.LastName = { $regex: LastName, $options: "i" };
+    }
+    if(email){
+        search.email = { $regex: email, $options: "i" };
+    }
+    if(phone){
+        search.phone = { $regex: phone, $options: "i" };
+    }
+    const page = req.query.page || 1;
+    const limit = req.query.limit ;
+    
+    const searchLand = await LandlordModal.find(search)
+     console.log(searchLand);
+     res.status(200).json({status:"success",land:searchLand})
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ status: "error"  })
+  }
+}
 const getLandLord = async (req, res) => {
     try {
         const users = await LandlordModal.find({});
@@ -73,7 +99,6 @@ const postLandLord = async (req, res) => {
 
         const newLandlord = new LandlordModal(newUser);
         await newLandlord.save();
-
         res.status(201).json({ status: 'success', Landlord: newUser });
     } catch (error) {
         console.error(error);
@@ -122,13 +147,14 @@ const updateLandlord=async(req,res)=>{
 
 const deleteLandlord =async(req,res)=>{
      const {id}= req.params;
-     try {
-        const deleteLandlord= await LandlordModal.findOneAndDelete({_id:id});
-        res.status(200).json({status:"success",deleteLandlord})
-     } catch (error) {
+    try {
+        const deleteLandlord = await LandlordModal.findOneAndDelete({_id:id})
+        console.log(deleteLandlord);
+        res.status(200).json({status:"success",delete:deleteLandlord})
+    } catch (error) {
         console.log(error);
-       res.status(500).json({status:"error"});
-     }
+        res.status(500).json({ status: "error"})
+    }
 }
 // Multer configuration for file uploads
 const storage = multer.diskStorage({
@@ -142,7 +168,7 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({
-    storage,
+    storage:storage,
     limits: { fileSize: 1000000 }, // 1 MB limit
     fileFilter: (req, file, cb) => {
         const fileTypes = ['.jpeg', '.jpg', '.png', '.gif'];
@@ -161,5 +187,6 @@ module.exports = {
     postLandLord,
     upload,
     updateLandlord,
-    deleteLandlord
+    deleteLandlord,
+    filterLandlord
 };
