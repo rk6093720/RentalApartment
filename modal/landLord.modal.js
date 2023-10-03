@@ -14,11 +14,8 @@ const landLord = new mongoose.Schema({
     countApartment:{type:Number,required:true},
     adharCard:{type:String,required:true},
     document:{type:String},
-    propertyCode:{type:String,required:true},
-  
-    
+    propertyCode:{type:String,required:true},  
 })
-
 const LandlordModal = mongoose.model("LandLord",landLord);
 module.exports={
     LandlordModal
