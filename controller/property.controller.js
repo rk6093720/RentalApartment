@@ -1,5 +1,4 @@
 const { PropertyModel } = require("../modal/property.modal");
-
 const getProperty= async(req,res)=>{
    try {
     const getNewProperty = await PropertyModel.find({})
@@ -17,7 +16,7 @@ function generateRandomFourDigitCode() {
 }
 
 const postProperty= async(req,res)=>{
-    const { propertycode, propertyname, location, unit, unitNumber, propertyType, address, agentCommission, agentCommissionType, agentPaymentType, agentPaymentText, extraFeeextraCharge, typeOfCharge, recurrence, lateFine, extraChargeLateFine, gracePeriod, frequency, utlitityName, cost, bill, _id }= req.body;
+    const { address, agentCommission, agentCommissionType, extra, late, location, propertycode, propertyname,  propertyType, modals,  payment,  utilities , _id }= req.body;
     try {
         const exist=_id
           ? await PropertyModel.findById(_id) 
@@ -26,11 +25,10 @@ const postProperty= async(req,res)=>{
             console.log(exist);
             return res.status(400).json({status:"error",msg:"someone property already mention"})
         }
-    
-         // Generate a random four-digit code
+    // Generate a random four-digit code
         const randomCode = generateRandomFourDigitCode();
         const newProperty = {
-            propertycode: `PID${randomCode}`, propertyname, location, unit, unitNumber, propertyType, address, agentCommission, agentCommissionType, agentPaymentType, agentPaymentText, extraFeeextraCharge, typeOfCharge, recurrence, lateFine, extraChargeLateFine, gracePeriod, frequency, utlitityName, cost, bill
+            address, agentCommission, agentCommissionType, extra, late, location, modals,propertycode: `PID${randomCode}`, propertyname, propertyType, payment,utilities
         }
       const newPropertyLand= await PropertyModel(newProperty);
       await newPropertyLand.save();
