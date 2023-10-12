@@ -38,7 +38,35 @@ const postProperty= async(req,res)=>{
         res.status(500).json({status:"error"})   
     }
 }
+const updateProperty = async(req,res)=>{
+         const {id} = req.params;
+    const { address, agentCommission, agentCommissionType, extra, late, location, propertycode, propertyname, propertyType, modals, payment, utilities }= req?.body;
+    const newProperty ={
+        address, agentCommission, agentCommissionType, extra, late, location, propertycode, propertyname, propertyType, modals, payment, utilities
+    }
+    try {
+        await PropertyModel.findOneAndUpdate({_id:id}, newProperty, {new:true})
+        res.status(200).json({ status: "success", msg: "edit successfully", editProperty: newProperty });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ msg: "something went wrong", status: "error" })
+    }
+}
+
+const deleteProperty = async(req,res)=>{
+    const {id} = req.params;
+    try {
+      const deleteProperty = await PropertyModel.findOneAndDelete({_id:id})
+        console.log(deleteProperty);
+        res.status(200).json({ status: "success", delete: deleteProperty })  
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ status: "error" })
+    }
+}
 module.exports={
     getProperty,
-    postProperty
+    postProperty,
+    updateProperty,
+    deleteProperty
 }

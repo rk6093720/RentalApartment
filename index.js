@@ -5,6 +5,7 @@ const {adminRoute }= require("./Routes/admin.routes");
 const { userRoute } = require('./Routes/user.routes');
 const { landLordRouter } = require('./Routes/landLord.routes');
 const { propertyRouter } = require('./Routes/property.routes');
+const { tentantRouter } = require('./Routes/tentant.routes');
 const app = express();
 require('dotenv').config();
 const port = process.env.PORT || 8000;
@@ -14,6 +15,7 @@ app.use("/admin",adminRoute);
 app.use("/users",userRoute);
 app.use("/landlord",landLordRouter);
 app.use("/property",propertyRouter);
+app.use("/tentants",tentantRouter);
 app.use('/images', express.static('./images'))
 app.listen(port,async()=>{
     try {
