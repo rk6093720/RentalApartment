@@ -1,7 +1,13 @@
 const { TentantModal } = require("../modal/tentant.modal");
 
 const getTentant = async(req,res)=>{
-
+    try {
+        const getNewTentant = await TentantModal.find({})
+        res.status(200).json({ Tentant: getNewTentant, status: "success" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ status: "error" });
+    }
 }
 const postTentant= async(req,res)=>{
     const { business_name,
@@ -31,7 +37,6 @@ const postTentant= async(req,res)=>{
         postalAddress,
         physicalAddress,
         password,
-        confirmPassword,
         kinName,
         kinPhone,
         kinRelation,
@@ -69,7 +74,6 @@ const postTentant= async(req,res)=>{
         postalAddress,
         physicalAddress,
         password,
-        confirmPassword,
         kinName,
         kinPhone,
         kinRelation,
