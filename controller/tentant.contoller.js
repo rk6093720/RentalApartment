@@ -94,7 +94,104 @@ const postTentant= async(req,res)=>{
     }
 
 }
+const editTentant = async(req,res)=>{
+    const {id} = req.params;
+    const {
+        business_name,
+        license_number,
+        tax_id,
+        business_address,
+        business_industry,
+        business_description,
+        employee_Status,
+        employee_position,
+        employee_phone,
+        employee_email,
+        employee_postalAddress,
+        employee_physicalAddress,
+        tentant_Type,
+        firstName,
+        lastName,
+        gender,
+        dob,
+        passportNumber,
+        martialStatus,
+        phone,
+        email,
+        country,
+        city,
+        postalCode,
+        postalAddress,
+        physicalAddress,
+        kinName,
+        kinPhone,
+        kinRelation,
+        emergency_name,
+        emergency_phone,
+        emergency_email,
+        emergency_relation,
+        emergency_postalAddress,
+        emergency_physicalAddress
+    } = req.body;
+    const newTentant={
+        business_name,
+        license_number,
+        tax_id,
+        business_address,
+        business_industry,
+        business_description,
+        employee_Status,
+        employee_position,
+        employee_phone,
+        employee_email,
+        employee_postalAddress,
+        employee_physicalAddress,
+        tentant_Type,
+        firstName,
+        lastName,
+        gender,
+        dob,
+        passportNumber,
+        martialStatus,
+        phone,
+        email,
+        country,
+        city,
+        postalCode,
+        postalAddress,
+        physicalAddress,
+        kinName,
+        kinPhone,
+        kinRelation,
+        emergency_name,
+        emergency_phone,
+        emergency_email,
+        emergency_relation,
+        emergency_postalAddress,
+        emergency_physicalAddress
+    }
+    try {
+        const newEditTentants= await TentantModal.findOneAndUpdate({_id:id},newTentant,{new:true})
+        res.status(200).json({ status: "success", msg: "edit successfully", editTentant: newEditTentants });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ msg: "something went wrong", status: "error" })
+    }
+}
+const deleteTentant = async(req,res)=>{
+    const { id } = req.params;
+    try {
+        const deleteTentant = await TentantModal.findOneAndDelete({ _id: id })
+        res.status(200).json({ status: "success", delete: deleteTentant })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ status: "error" })
+    }
+
+}
 module.exports={
     getTentant,
-    postTentant
+    postTentant,
+    editTentant,
+    deleteTentant
 }
