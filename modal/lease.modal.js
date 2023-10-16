@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const leaseSchema = new mongoose.Schema({
+    leaseNumber:{type:String},
     property:{type:String}, 
     unit:{type:String}, 
     leaseType:{type:String}, 
@@ -44,11 +45,7 @@ const leaseSchema = new mongoose.Schema({
             bill: String,
         }
     ],
-    leaseSetting:[
-        {
-            dayType:Number,
-        }
-    ]
+    dayType:{type:String}
 }) 
 const LeaseModal = mongoose.model("Lease", leaseSchema);
 module.exports={
