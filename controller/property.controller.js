@@ -57,7 +57,7 @@ const deleteProperty = async(req,res)=>{
     const {id} = req.params;
     try {
       const deleteProperty = await PropertyModel.findOneAndDelete({_id:id})
-        console.log(deleteProperty);
+        // console.log(deleteProperty);
         res.status(200).json({ status: "success", delete: deleteProperty })  
     } catch (error) {
         console.log(error);

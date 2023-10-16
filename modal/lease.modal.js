@@ -6,6 +6,8 @@ const leaseSchema = new mongoose.Schema({
     leaseType:{type:String}, 
     amount:{type:String}, 
     startDate:{type:Date},
+    lastBill:{type:Date},
+    propertycode:{type:String},
     day:{type:Number},
     leaseAmount:{type:String},
     deposit:[
