@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors')
+const dotenv = require("dotenv");
 const { connection } = require('./Config/db');
 const {adminRoute }= require("./Routes/admin.routes");
 const { userRoute } = require('./Routes/user.routes');
@@ -9,7 +10,7 @@ const { tentantRouter } = require('./Routes/tentant.routes');
 const { leaseRouter } = require('./Routes/lease.routes');
 const { utilityRouter } = require('./Routes/utility.routes');
 const app = express();
-require('dotenv').config();
+dotenv.config();
 const port = process.env.PORT || 8000;
 app.use(cors());
 app.use(express.json());
