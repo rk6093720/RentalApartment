@@ -3,7 +3,7 @@ const { PaymentModal } = require("../modal/payment.modal");
 const getPayment = async(req,res)=>{
     try {
         const getNewPayment = await PaymentModal.find()
-        res.status(200).send({ Property: getNewPayment, status: "success" });
+        res.status(200).send({ Payment: getNewPayment, status: "success" });
     } catch (error) {
         console.log(error);
         res.status(500).send({ status: "error" });
@@ -17,7 +17,7 @@ const postPayment = async(req,res)=>{
     try {
        const newPaymentLand =  await PaymentModal(newPayment);
        await newPaymentLand.save();
-     res.status(200).send({ AddPaymentt: newPaymentLand, status: "success" });
+     res.status(200).send({ AddPayment: newPaymentLand, status: "success" });
     } catch (error) {
         console.log(error);
         res.status(500).send({ status: "error" }) 
