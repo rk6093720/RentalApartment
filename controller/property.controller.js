@@ -1,11 +1,11 @@
 const { PropertyModel } = require("../modal/property.modal");
 const getProperty= async(req,res)=>{
    try {
-    const getNewProperty = await PropertyModel.find({})
-    res.status(200).json({Property:getNewProperty, status:"success"});
+    const getNewProperty = await PropertyModel.find()
+    res.status(200).send({Property:getNewProperty, status:"success"});
    } catch (error) {
     console.log(error);
-    res.status(500).json({  status: "error" });
+    res.status(500).send({  status: "error" });
    }
 }
 function generateRandomFourDigitCode() {
@@ -23,7 +23,7 @@ const postProperty= async(req,res)=>{
           : await PropertyModel.findOne({ propertycode })
         if(exist){
             console.log(exist);
-            return res.status(400).json({status:"error",msg:"someone property already mention"})
+            return res.status(400).send({status:"error",msg:"someone property already mention"})
         }
     // Generate a random four-digit code
         const randomCode = generateRandomFourDigitCode();
@@ -32,10 +32,10 @@ const postProperty= async(req,res)=>{
         }
       const newPropertyLand= await PropertyModel(newProperty);
       await newPropertyLand.save();
-     res.status(200).json({AddProperty:newPropertyLand,status:"success"});
+     res.status(200).send({AddProperty:newPropertyLand,status:"success"});
     } catch (error) {
         console.log(error);
-        res.status(500).json({status:"error"})   
+        res.status(500).send({status:"error"})   
     }
 }
 const updateProperty = async(req,res)=>{
@@ -46,10 +46,10 @@ const updateProperty = async(req,res)=>{
     }
     try {
         await PropertyModel.findOneAndUpdate({_id:id}, newProperty, {new:true})
-        res.status(200).json({ status: "success", msg: "edit successfully", editProperty: newProperty });
+        res.status(200).send({ status: "success", msg: "edit successfully", editProperty: newProperty });
     } catch (error) {
         console.log(error);
-        res.status(500).json({ msg: "something went wrong", status: "error" })
+        res.status(500).send({ msg: "something went wrong", status: "error" })
     }
 }
 
@@ -58,10 +58,10 @@ const deleteProperty = async(req,res)=>{
     try {
       const deleteProperty = await PropertyModel.findOneAndDelete({_id:id})
         // console.log(deleteProperty);
-        res.status(200).json({ status: "success", delete: deleteProperty })  
+        res.status(200).send({ status: "success", delete: deleteProperty })  
     } catch (error) {
         console.log(error);
-        res.status(500).json({ status: "error" })
+        res.status(500).send({ status: "error" })
     }
 }
 module.exports={

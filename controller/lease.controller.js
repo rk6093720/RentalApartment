@@ -2,11 +2,11 @@ const { LeaseModal } = require("../modal/lease.modal");
 
 const getLease=async(req,res)=>{
     try {
-        const getNewLease = await LeaseModal.find({})
-        res.status(200).json({ Lease: getNewLease, status: "success" });
+        const getNewLease = await LeaseModal.find()
+        res.status(200).send({ Lease: getNewLease, status: "success" });
     } catch (error) {
         console.log(error);
-        res.status(500).json({ status: "error" });
+        res.status(500).send({ status: "error" });
     }
 }
 function generateRandomFourDigitCode() {
@@ -25,10 +25,10 @@ const postLease= async(req,res)=>{
     try {
         const newPostLease = await LeaseModal(newLease);
         await newPostLease.save();
-        res.status(200).json({ AddLease: newPostLease, status: "success" });        
+        res.status(200).send({ AddLease: newPostLease, status: "success" });        
     } catch (error) {
         console.log(error);
-        res.status(500).json({ status: "error" }) 
+        res.status(500).send({ status: "error" }) 
     }
 }
 
@@ -40,10 +40,10 @@ const putLease = async(req,res)=>{
     }
     try {
         await LeaseModal.findOneAndUpdate({ _id: id }, newLease, { new: true })
-        res.status(200).json({ status: "success", msg: "edit successfully", editLease: newLease });
+        res.status(200).send({ status: "success", msg: "edit successfully", editLease: newLease });
     } catch (error) {
         console.log(error);
-        res.status(500).json({ msg: "something went wrong", status: "error" })
+        res.status(500).send({ msg: "something went wrong", status: "error" })
     }
 
 }
@@ -52,10 +52,10 @@ const deleteLease=async(req,res)=>{
     try {
         const deleteLease = await LeaseModal.findOneAndDelete({ _id: id })
         // console.log(deleteLease);
-        res.status(200).json({ status: "success", delete: deleteLease })
+        res.status(200).send({ status: "success", delete: deleteLease })
     } catch (error) {
         console.log(error);
-        res.status(500).json({ status: "error" })
+        res.status(500).send({ status: "error" })
     }
 }
 module.exports={

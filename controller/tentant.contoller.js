@@ -2,11 +2,11 @@ const { TentantModal } = require("../modal/tentant.modal");
 
 const getTentant = async(req,res)=>{
     try {
-        const getNewTentant = await TentantModal.find({})
-        res.status(200).json({ Tentant: getNewTentant, status: "success" });
+        const getNewTentant = await TentantModal.find()
+        res.status(200).send({ Tentant: getNewTentant, status: "success" });
     } catch (error) {
         console.log(error);
-        res.status(500).json({ status: "error" });
+        res.status(500).send({ status: "error" });
     }
 }
 const postTentant= async(req,res)=>{
@@ -87,10 +87,10 @@ const postTentant= async(req,res)=>{
     try {
         const post_request = await TentantModal(newTentant);
         await post_request.save();
-        res.status(200).json({ AddTentant: post_request, status: "success" });
+        res.status(200).send({ AddTentant: post_request, status: "success" });
     } catch (error) {
         console.log(error);
-        res.status(500).json({ status: "error" }) 
+        res.status(500).send({ status: "error" }) 
     }
 
 }
@@ -172,20 +172,20 @@ const editTentant = async(req,res)=>{
     }
     try {
         const newEditTentants= await TentantModal.findOneAndUpdate({_id:id},newTentant,{new:true})
-        res.status(200).json({ status: "success", msg: "edit successfully", editTentant: newEditTentants });
+        res.status(200).send({ status: "success", msg: "edit successfully", editTentant: newEditTentants });
     } catch (error) {
         console.log(error);
-        res.status(500).json({ msg: "something went wrong", status: "error" })
+        res.status(500).send({ msg: "something went wrong", status: "error" })
     }
 }
 const deleteTentant = async(req,res)=>{
     const { id } = req.params;
     try {
         const deleteTentant = await TentantModal.findOneAndDelete({ _id: id })
-        res.status(200).json({ status: "success", delete: deleteTentant })
+        res.status(200).send({ status: "success", delete: deleteTentant })
     } catch (error) {
         console.log(error);
-        res.status(500).json({ status: "error" })
+        res.status(500).send({ status: "error" })
     }
 
 }

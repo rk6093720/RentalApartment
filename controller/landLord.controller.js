@@ -25,19 +25,19 @@ const filterLandlord= async(req,res)=>{
     
     const searchLand = await LandlordModal.find(search)
      console.log(searchLand);
-     res.status(200).json({status:"success",land:searchLand})
+     res.status(200).send({status:"success",land:searchLand})
   } catch (error) {
     console.log(error);
-    res.status(500).json({ status: "error"  })
+    res.status(500).send({ status: "error"  })
   }
 }
 const getLandLord = async (req, res) => {
     try {
-        const users = await LandlordModal.find({});
-        res.status(200).json({ Landlords: users, status: "success" });
+        const users = await LandlordModal.find();
+        res.status(200).send({ Landlords: users, status: "success" });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ status: "error", message: "Internal server error" });
+        res.status(500).send({ status: "error", message: "Internal server error" });
     }
 };
 
@@ -65,7 +65,7 @@ const postLandLord = async (req, res) => {
             : await LandlordModal.findOne({ email });
 
         if (existingUser) {
-            return res.status(400).json({ status: 'error', message: 'User already exists' });
+            return res.status(400).send({ status: 'error', message: 'User already exists' });
         }
 
         const date = moment().format("YYYY-MM-DD HH:mm:ss");
@@ -99,10 +99,10 @@ const postLandLord = async (req, res) => {
 
         const newLandlord = new LandlordModal(newUser);
         await newLandlord.save();
-        res.status(201).json({ status: 'success', Landlord: newUser });
+        res.status(201).send({ status: 'success', Landlord: newUser });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ status: 'error', message: 'Internal server error' });
+        res.status(500).send({ status: 'error', message: 'Internal server error' });
     }
 };
 
@@ -138,10 +138,10 @@ const updateLandlord=async(req,res)=>{
         }
     try {
         await LandlordModal.findOneAndUpdate({ _id: id },newLandlord,{new:true});
-        res.status(200).json({status:"success",msg:"edit successfully",editLandlord:newLandlord});
+        res.status(200).send({status:"success",msg:"edit successfully",editLandlord:newLandlord});
     } catch (error) {
         console.log(error);
-        res.status(500).json({msg:"something went wrong",status:"error"})
+        res.status(500).send({msg:"something went wrong",status:"error"})
     }
 }
 
@@ -150,10 +150,10 @@ const deleteLandlord =async(req,res)=>{
     try {
         const deleteLandlord = await LandlordModal.findOneAndDelete({_id:id})
         console.log(deleteLandlord);
-        res.status(200).json({status:"success",delete:deleteLandlord})
+        res.status(200).send({status:"success",delete:deleteLandlord})
     } catch (error) {
         console.log(error);
-        res.status(500).json({ status: "error"})
+        res.status(500).send({ status: "error"})
     }
 }
 // Multer configuration for file uploads
