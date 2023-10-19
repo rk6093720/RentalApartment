@@ -69,16 +69,15 @@ const postLandLord = async (req, res) => {
         }
 
         const date = moment().format("YYYY-MM-DD HH:mm:ss");
-
         let image = null;
         if (req.file) {
             const uniqueFilename = uuidv4() + path.extname(req.file.originalname);
             const imagePath = path.join(__dirname, '..', 'images', uniqueFilename);
-           console.log(imagePath);
+
             await fs.rename(req.file.path, imagePath);
             image = uniqueFilename; // Save the unique filename to the database
         }
-        //  console.log(image)
+         console.log(image)
         const newUser = {
             firstName,
             LastName,
@@ -159,7 +158,7 @@ const deleteLandlord =async(req,res)=>{
 // Multer configuration for file uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "./images");
+        cb(null, "images");
     },
     filename: function (req, file, cb) {
         const uniqueSuffix = uuidv4() + path.extname(file.originalname);
@@ -173,11 +172,9 @@ const upload = multer({
     fileFilter: (req, file, cb) => {
         const fileTypes = ['.jpeg', '.jpg', '.png', '.gif'];
         const extname = path.extname(file.originalname).toLowerCase();
-
         if (fileTypes.includes(extname)) {
             return cb(null, true);
         }
-
         cb('Invalid file format. Only JPEG, JPG, PNG, and GIF files are allowed');
     }
 }).single("document");

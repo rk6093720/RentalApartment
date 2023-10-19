@@ -23,7 +23,7 @@ app.use("/utility",utilityRouter);
 app.use("/payment",paymentRouter);
 app.use("/tentants",tentantRouter);
 app.use("/leases",leaseRouter)
-// app.use('/images', express.static('./images'));
+app.use('/images', express.static('./images'));
 app.get("/",(req,res)=>{
     res.send("Welcome to  Apartment Website")
 })
