@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const leaseSchema = new mongoose.Schema({
+    image:{type:String},
     leaseNumber:{type:String},
     property:{type:String}, 
     unit:{type:String}, 
