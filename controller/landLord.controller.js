@@ -56,6 +56,7 @@ const postLandLord = async (req, res) => {
         propertyName,
         countApartment,
         adharCard,
+        document,
         propertyCode
     } = req.body;
 
@@ -63,22 +64,18 @@ const postLandLord = async (req, res) => {
         const existingUser = _id
             ? await LandlordModal.findById(_id)
             : await LandlordModal.findOne({ email });
-
         if (existingUser) {
             return res.status(400).json({ status: 'error', message: 'User already exists' });
         }
-
         const date = moment().format("YYYY-MM-DD HH:mm:ss");
-
         let image = null;
         if (req.file) {
             const uniqueFilename = uuidv4() + path.extname(req.file.originalname);
             const imagePath = path.join(__dirname, '..', 'images', uniqueFilename);
-
             await fs.rename(req.file.path, imagePath);
             image = uniqueFilename; // Save the unique filename to the database
         }
-        //  console.log(image)
+         console.log(image)
         const newUser = {
             firstName,
             LastName,
@@ -159,7 +156,7 @@ const deleteLandlord =async(req,res)=>{
 // Multer configuration for file uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "images");
+        cb(null, "./images");
     },
     filename: function (req, file, cb) {
         const uniqueSuffix = uuidv4() + path.extname(file.originalname);
