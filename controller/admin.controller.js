@@ -3,7 +3,6 @@ const jwt=require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const jwtSecret= process.env.JWT_SECRET;
 const nodemailer=require("nodemailer");
-const port= process.env.PORT;
 const Login = async(req,res)=>{
     try {
         const { email, password } = req?.body;
