@@ -74,7 +74,7 @@ const postLandLord = async (req, res) => {
         if (req.file) {
             const uniqueFilename = uuidv4() + path.extname(req.file.originalname);
             const imagePath = path.join(__dirname, '..', 'images', uniqueFilename);
-
+           console.log(imagePath);
             await fs.rename(req.file.path, imagePath);
             image = uniqueFilename; // Save the unique filename to the database
         }
