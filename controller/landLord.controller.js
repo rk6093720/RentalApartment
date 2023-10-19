@@ -65,10 +65,11 @@ const postLandLord = async (req, res) => {
             : await LandlordModal.findOne({ email });
 
         if (existingUser) {
-            return res.status(400).send({ status: 'error', message: 'User already exists' });
+            return res.status(400).json({ status: 'error', message: 'User already exists' });
         }
 
         const date = moment().format("YYYY-MM-DD HH:mm:ss");
+
         let image = null;
         if (req.file) {
             const uniqueFilename = uuidv4() + path.extname(req.file.originalname);
@@ -77,7 +78,7 @@ const postLandLord = async (req, res) => {
             await fs.rename(req.file.path, imagePath);
             image = uniqueFilename; // Save the unique filename to the database
         }
-         console.log(image)
+        //  console.log(image)
         const newUser = {
             firstName,
             LastName,
@@ -98,13 +99,13 @@ const postLandLord = async (req, res) => {
 
         const newLandlord = new LandlordModal(newUser);
         await newLandlord.save();
-        res.status(201).send({ status: 'success', Landlord: newUser });
+
+        res.status(201).json({ status: 'success', Landlord: newUser });
     } catch (error) {
         console.error(error);
-        res.status(500).send({ status: 'error', message: 'Internal server error' });
+        res.status(500).json({ status: 'error', message: 'Internal server error' });
     }
 };
-
 const updateLandlord=async(req,res)=>{
     const {id}= req.params;
     const { firstName,
