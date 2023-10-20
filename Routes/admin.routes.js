@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { Login, forgetPassword, Logout, Register, resetPassword, postResetPassword, adminData } = require("../controller/admin.controller");
+const { Login, forgetPassword, Logout, resetPassword, postResetPassword, adminData } = require("../controller/admin.controller");
 const adminRoute = Router();
 
 adminRoute.get("/",(req,res)=>{
