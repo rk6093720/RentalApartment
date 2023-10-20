@@ -11,12 +11,13 @@ const Login = async(req,res)=>{
             const admin = await AdminModal.findOne({ email })
             if (!admin) {
             const encrypt = await bcrypt.hash(password, 10);
-            const newAdmin = await AdminModal.create({
+            const newAdmin = await AdminModal({
                 email,
                 password: encrypt,
                 userType: "admin", // Assuming userType for admin
             });
             await newAdmin.save();
+            admin=newAdmin;
            }
             if (await bcrypt.compare(password, admin.password)) {
                 const token = jwt.sign({ email: admin.email }, jwtSecret, {
