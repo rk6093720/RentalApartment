@@ -8,7 +8,7 @@ const Login = async(req,res)=>{
         const { email, password } = req?.body;
         if (email === "admin@gmail.com") {
             // If they match, create a new admin user in the MongoDB database
-            const admin = await AdminModal.findOne({ email })
+            const admin = await AdminModal.find( email )
             if (!admin) {
             const encrypt = await bcrypt.hash(password, 10);
             const newAdmin = await AdminModal({
@@ -17,7 +17,6 @@ const Login = async(req,res)=>{
                 userType: "admin", // Assuming userType for admin
             });
             await newAdmin.save();
-            admin=newAdmin;
            }
             if (await bcrypt.compare(password, admin.password)) {
                 const token = jwt.sign({ email: admin.email }, jwtSecret, {
@@ -49,7 +48,7 @@ const adminData=async(req,res)=>{
         }
 
         const userEmail = user.email;
-        AdminModal.findOne({ email: userEmail })
+        AdminModal.find( userEmail )
             .then((data) => {
                 res.send({ status: "success", data: data });
             })
@@ -63,7 +62,7 @@ const adminData=async(req,res)=>{
 const forgetPassword= async(req,res)=>{
     const { email } = req.body;
     try {
-        const oldUser = await AdminModal.findOne({ email });
+        const oldUser = await AdminModal.find( email );
         if (!oldUser) {
             return res.json({ status: "admin Not Exists!!" });
         }
@@ -107,7 +106,7 @@ const resetPassword= async(req,res)=>{
     const { id, token } = req.params;
     console.log(id,token);
     // console.log(req.params);
-    const oldUser = await AdminModal.findOne({ _id: id, verifyToken: token });
+    const oldUser = await AdminModal.find( id, token );
     if (!oldUser) {
         return res.json({ status: "Admin Not Exists!!" });
     }
@@ -123,7 +122,7 @@ const resetPassword= async(req,res)=>{
 const postResetPassword = async (req, res) => {
     const { id, token } = req.params;
     const { password } = req.body;
-   const oldUser = await AdminModal.findOne({ _id: id ,verifyToken:token});
+   const oldUser = await AdminModal.find( id ,token);
     if (!oldUser) {
         return res.json({ status: "Admin Not Exists!!" });
     }
@@ -150,9 +149,10 @@ const postResetPassword = async (req, res) => {
 }
 const Logout = async(req,res)=>{
     const { email } = req.body;
+    const {id}= req.params;
    try {
-    const id = await AdminModal.findOne({_id:id})
-    if(!id){
+    const Isid = await AdminModal.find(id)
+    if(!Isid){
         return res.status(404).json({ message: 'Admin not found' });
     }
     const logoutTime = new Date();
