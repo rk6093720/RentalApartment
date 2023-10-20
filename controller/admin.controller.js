@@ -62,7 +62,7 @@ const adminData=async(req,res)=>{
 const forgetPassword= async(req,res)=>{
     const { email } = req.body;
     try {
-        const oldUser = await AdminModal.find( email );
+        const oldUser = await AdminModal.findOne({email} );
         if (!oldUser) {
             return res.json({ status: "admin Not Exists!!" });
         }
