@@ -106,7 +106,7 @@ const resetPassword= async(req,res)=>{
     const { id, token } = req.params;
     console.log(id,token);
     // console.log(req.params);
-    const oldUser = await AdminModal.find( id, token );
+    const oldUser = await AdminModal.findOne({_id: id, verifyToken: token });
     if (!oldUser) {
         return res.json({ status: "Admin Not Exists!!" });
     }
@@ -122,7 +122,7 @@ const resetPassword= async(req,res)=>{
 const postResetPassword = async (req, res) => {
     const { id, token } = req.params;
     const { password } = req.body;
-   const oldUser = await AdminModal.find( id ,token);
+   const oldUser = await AdminModal.findOne({_id: id ,verifyToken:token});
     if (!oldUser) {
         return res.json({ status: "Admin Not Exists!!" });
     }
