@@ -1,10 +1,10 @@
 const {Router} = require("express");
-const { getLandLord, postLandLord, updateLandlord, deleteLandlord, filterLandlord, handleFileUpload } = require("../controller/landLord.controller");
+const { getLandLord, postLandLord, updateLandlord, deleteLandlord, filterLandlord,  upload } = require("../controller/landLord.controller");
 const landLordRouter = Router();
 //get request for landLord;
 landLordRouter.get("/read",getLandLord);
 //post request for landLord;
-landLordRouter.post("/create",handleFileUpload,postLandLord)
+landLordRouter.post("/create",upload,postLandLord)
 //put and patch request for editing credentials for landlord;
 landLordRouter.put("/update/:id",updateLandlord);
 //delete request for landlord;
