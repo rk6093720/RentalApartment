@@ -41,7 +41,7 @@ const getLandLord = async (req, res) => {
 };
 
 const postLandLord = async (req, res) => {
-    let image = (req.file) ? req.file.filename : null;
+    let image = (req.file) ? req.file.path : null;
     const {
         firstName,
         LastName,
