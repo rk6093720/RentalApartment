@@ -68,14 +68,18 @@ const postLandLord = async (req, res) => {
             return res.status(400).json({ status: 'error', message: 'User already exists' });
         }
         const date = moment().format("YYYY-MM-DD HH:mm:ss");
+        // let image = null;
+        // if (req.file) {
+        //     const uniqueFilename = uuidv4() + path.extname(req.file.originalname);
+        //     const imagePath = path.join(__dirname, '..', 'images', uniqueFilename);
+        //     await fs.rename(req.file.path, imagePath);
+        //     image = uniqueFilename; // Save the unique filename to the database
+        // }
+        //  console.log(image)
         let image = null;
         if (req.file) {
-            const uniqueFilename = uuidv4() + path.extname(req.file.originalname);
-            const imagePath = path.join(__dirname, '..', 'images', uniqueFilename);
-            await fs.rename(req.file.path, imagePath);
-            image = uniqueFilename; // Save the unique filename to the database
+            image = req.file.filename; // Save the unique filename to the database
         }
-         console.log(image)
         const newUser = {
             firstName,
             LastName,
