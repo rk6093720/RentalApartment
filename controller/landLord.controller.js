@@ -78,7 +78,7 @@ const postLandLord = async (req, res) => {
         //  console.log(image)
         let image = null;
         if (req.file) {
-            image = req.file.filename; // Save the unique filename to the database
+            image = req.file.path; // Save the unique filename to the database
         }
         const newUser = {
             firstName,
