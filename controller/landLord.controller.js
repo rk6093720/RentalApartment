@@ -153,34 +153,54 @@ const deleteLandlord =async(req,res)=>{
         res.status(500).send({ status: "error"})
     }
 }
-// Multer configuration for file uploads
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, "images");
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = uuidv4() + path.extname(file.originalname);
-        cb(null, uniqueSuffix);
-    },
-});
 
-const upload = multer({
-    storage:storage,
-    limits: { fileSize: 1000000 }, // 1 MB limit
-    fileFilter: (req, file, cb) => {
-        const fileTypes = ['.jpeg', '.jpg', '.png', '.gif'];
-        const extname = path.extname(file.originalname).toLowerCase();
-        if (fileTypes.includes(extname)) {
-            return cb(null, true);
-        }
-        cb('Invalid file format. Only JPEG, JPG, PNG, and GIF files are allowed');
+fs.mkdir('images', { recursive: true })
+    .then(() => console.log('Directory created'))
+    .catch(err => console.error('Error creating directory: ', err));
+
+// Define a function to handle file uploads
+const handleFileUpload = async (req, res, next) => {
+    try {
+        const storage = multer.diskStorage({
+            destination: function (req, file, cb) {
+                cb(null, path.join(__dirname, 'images')); // Use an absolute path for the "images/" folder
+            },
+            filename: function (req, file, cb) {
+                const uniqueSuffix = uuidv4() + path.extname(file.originalname);
+                cb(null, uniqueSuffix);
+            },
+        });
+
+        const upload = multer({
+            storage: storage,
+            limits: { fileSize: 1000000 }, // 1 MB limit
+            fileFilter: (req, file, cb) => {
+                const fileTypes = ['.jpeg', '.jpg', '.png', '.gif'];
+                const extname = path.extname(file.originalname).toLowerCase();
+                if (fileTypes.includes(extname)) {
+                    return cb(null, true);
+                }
+                cb('Invalid file format. Only JPEG, JPG, PNG, and GIF files are allowed');
+            }
+        }).single("document");
+
+        upload(req, res, (err) => {
+            if (err) {
+                console.error(err);
+                res.status(400).json({ status: 'error', message: 'File upload failed', error: err });
+            } else {
+                next(); // Continue processing after successful upload
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ status: 'error', message: 'Internal server error' });
     }
-}).single("document");
-
+};
 module.exports = {
     getLandLord,
     postLandLord,
-    upload,
+    handleFileUpload,
     updateLandlord,
     deleteLandlord,
     filterLandlord
