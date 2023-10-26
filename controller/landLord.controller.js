@@ -167,10 +167,10 @@ const handleFileUpload = async (req, res, next) => {
     try {
         const storage = multer.diskStorage({
             destination: function (req, file, cb) {
-                cb(null, path.join(__dirname, "images")); // Use an absolute path for the "images/" folder
+                cb(null, path.join(__dirname, 'images')); // Use an absolute path for the "images/" folder
             },
             filename: function (req, file, cb) {
-                const uniqueSuffix = uuidv4() + path.extname(file.originalname);
+                const uniqueSuffix = file.fieldname + "-" + uuidv4() + path.extname(file.originalname);
                 cb(null, uniqueSuffix);
             },
         });
