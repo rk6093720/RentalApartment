@@ -25,7 +25,7 @@ app.use("/payment",paymentRouter);
 app.use("/tentants",tentantRouter);
 app.use("/leases",leaseRouter);
 app.use("/vacatenotices", vacateRouter);
-app.use('/images', express.static('./images'));
+app.use('/images', express.static('images'));
 app.get("/",(req,res)=>{
     res.send("Welcome to  Apartment Website")
 })
