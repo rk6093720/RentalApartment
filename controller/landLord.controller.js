@@ -70,10 +70,7 @@ const postLandLord = async (req, res) => {
         const date = moment().format("YYYY-MM-DD HH:mm:ss");
         let image = null;
         if (req.file) {
-            const uniqueFilename = uuidv4() + path.extname(req.file.originalname);
-            const imagePath = path.join(__dirname, '..', 'images', uniqueFilename);
-            await fs.rename(req.file.path, imagePath);
-            image = uniqueFilename; // Save the unique filename to the database
+            image = req.file.path; // Save the unique filename to the database
         }
          console.log(image)
         const newUser = {
@@ -156,7 +153,7 @@ const deleteLandlord =async(req,res)=>{
 // Multer configuration for file uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null,'images');
+        cb(null, 'images');
     },
     filename: function (req, file, cb) {
         const uniqueSuffix = uuidv4() + path.extname(file.originalname);
