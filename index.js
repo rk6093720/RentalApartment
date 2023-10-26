@@ -16,7 +16,7 @@ dotenv.config();
 const port = process.env.PORT || 8000;
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 app.use('/images', express.static('public/images'))
 app.use("/admin",adminRoute);
 app.use("/users",userRoute);
