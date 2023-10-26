@@ -70,7 +70,7 @@ const postLandLord = async (req, res) => {
         const date = moment().format("YYYY-MM-DD HH:mm:ss");
         let image = null;
         if (req.file) {
-            image = req.file.path; // Save the unique filename to the database
+            image = req.file.filename; // Save the unique filename to the database
         }
          console.log(image)
         const newUser = {
