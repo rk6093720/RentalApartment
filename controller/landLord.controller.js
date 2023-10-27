@@ -41,6 +41,7 @@ const getLandLord = async (req, res) => {
 };
 
 const postLandLord = async (req, res) => {
+    let images = (req.file) ? req.file.path :null;
     const {
         firstName,
         LastName,
@@ -64,10 +65,7 @@ const postLandLord = async (req, res) => {
         if (existingUser) {
             return res.status(400).json({ status: 'error', message: 'User already exists' });
         }
-        if(!req.file) {
-            return res.status(400).json({ message: 'No file uploaded' });
-        } 
-        const { originalname ,path}= req.file;
+        
         const date = moment().format("YYYY-MM-DD HH:mm:ss");
         const newUser = {
             firstName,
@@ -82,8 +80,7 @@ const postLandLord = async (req, res) => {
             propertyName,
             countApartment,
             adharCard,
-            document: originalname,
-            path, // Store the unique filename
+            document: images, // Store the unique filename
             propertyCode,
             registerDate: date,
         };
@@ -150,10 +147,10 @@ const deleteLandlord =async(req,res)=>{
 // Multer configuration for file uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, path.join(__dirname, 'public/images'));
+        cb(null,  "ImageFolder");
     },
     filename: function (req, file, cb) {
-        const uniqueSuffix =  uuidv4() + path.extname(file.originalname);
+        const uniqueSuffix = uuidv4() +"-"+ path.extname(file.originalname);
         cb(null, uniqueSuffix);
     },
 });
@@ -169,7 +166,7 @@ const upload = multer({
         }
         cb('Invalid file format. Only JPEG, JPG, PNG, and GIF files are allowed');
     }
-}).single("photo");
+}).single("document");
 
 module.exports = {
     getLandLord,

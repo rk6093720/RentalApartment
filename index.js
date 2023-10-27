@@ -16,7 +16,7 @@ dotenv.config();
 const port = process.env.PORT || 8000;
 app.use(cors());
 app.use(express.json());
-app.use('/images', express.static( "./public/images"))
+app.use('/images', express.static( "./ImageFolder"))
 app.use("/admin",adminRoute);
 app.use("/users",userRoute);
 app.use("/landlord",landLordRouter);
@@ -26,7 +26,6 @@ app.use("/payment",paymentRouter);
 app.use("/tentants",tentantRouter);
 app.use("/leases",leaseRouter);
 app.use("/vacatenotices", vacateRouter);
-
 app.get("/",(req,res)=>{
     res.send("Welcome to  Apartment Website")
 })
