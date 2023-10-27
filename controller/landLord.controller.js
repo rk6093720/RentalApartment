@@ -41,7 +41,6 @@ const getLandLord = async (req, res) => {
 };
 
 const postLandLord = async (req, res) => {
-    let image = (req.file) ? req.file.path : null;
     const {
         firstName,
         LastName,
@@ -58,7 +57,6 @@ const postLandLord = async (req, res) => {
         adharCard,
         propertyCode
     } = req.body;
-
     try {
         const existingUser = _id
             ? await LandlordModal.findById(_id)
@@ -66,6 +64,10 @@ const postLandLord = async (req, res) => {
         if (existingUser) {
             return res.status(400).json({ status: 'error', message: 'User already exists' });
         }
+        if(!req.file) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        } 
+        const { originalname ,path}= req.file;
         const date = moment().format("YYYY-MM-DD HH:mm:ss");
          console.log(image)
         const newUser = {
@@ -81,7 +83,8 @@ const postLandLord = async (req, res) => {
             propertyName,
             countApartment,
             adharCard,
-            document: image, // Store the unique filename
+            document: originalname,
+            path, // Store the unique filename
             propertyCode,
             registerDate: date,
         };
@@ -167,7 +170,7 @@ const upload = multer({
         }
         cb('Invalid file format. Only JPEG, JPG, PNG, and GIF files are allowed');
     }
-}).single("document");
+}).single("image");
 
 module.exports = {
     getLandLord,
