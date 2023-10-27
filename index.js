@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors')
 const dotenv = require("dotenv");
+const path = require('path');
 const { connection } = require('./Config/db');
 const {adminRoute }= require("./Routes/admin.routes");
 const { userRoute } = require('./Routes/user.routes');
@@ -17,7 +18,7 @@ const port = process.env.PORT || 8000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use('/images', express.static('public/images'))
+app.use('/images', express.static(path.join(__dirname, "public/images")))
 app.use("/admin",adminRoute);
 app.use("/users",userRoute);
 app.use("/landlord",landLordRouter);
