@@ -18,7 +18,7 @@ const port = process.env.PORT || 8000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use('/images', express.static(path.join(__dirname, "public/images")))
+app.use('/images', express.static(path.join(__dirname, "./public/images")))
 app.use("/admin",adminRoute);
 app.use("/users",userRoute);
 app.use("/landlord",landLordRouter);
