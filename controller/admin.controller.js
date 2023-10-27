@@ -8,7 +8,7 @@ const Login = async(req,res)=>{
         const { email, password } = req?.body;
         if (email === "admin@gmail.com") {
             // If they match, create a new admin user in the MongoDB database
-            const admin = await AdminModal.findOne({ email: "admin@gmail.com" })
+            const admin = await AdminModal.find({ email: "admin@gmail.com" })
             if (!admin) {
             const encrypt = await bcrypt.hash(password, 10);
             const newAdmin = await AdminModal({
@@ -62,7 +62,7 @@ const adminData=async(req,res)=>{
 const forgetPassword= async(req,res)=>{
     const { email } = req.body;
     try {
-        const oldUser = await AdminModal.findOne({email} );
+        const oldUser = await AdminModal.find(email);
         if (!oldUser) {
             return res.json({ status: "admin Not Exists!!" });
         }
