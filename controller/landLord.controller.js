@@ -170,7 +170,7 @@ const upload = multer({
         }
         cb('Invalid file format. Only JPEG, JPG, PNG, and GIF files are allowed');
     }
-}).single("image");
+}).single("photo");
 
 module.exports = {
     getLandLord,
