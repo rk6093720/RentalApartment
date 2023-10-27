@@ -69,7 +69,6 @@ const postLandLord = async (req, res) => {
         } 
         const { originalname ,path}= req.file;
         const date = moment().format("YYYY-MM-DD HH:mm:ss");
-         console.log(image)
         const newUser = {
             firstName,
             LastName,
