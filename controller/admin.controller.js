@@ -7,14 +7,13 @@ const Login = async(req,res)=>{
     try {
         const { email, password } = req?.body;
         if (email === "admin@gmail.com") {
-            // If they match, create a new admin user in the MongoDB database
-            const admin = await AdminModal.findOne({ email: "admin@gmail.com" } )
+            const admin = await AdminModal.findOne({ email: "admin@gmail.com"})
             if (!admin) {
             const encrypt = await bcrypt.hash(password, 10);
             const newAdmin = await AdminModal({
                 email,
                 password: encrypt,
-                userType: "admin", // Assuming userType for admin
+                userType: "admin", 
             });
             await newAdmin.save();
            }
