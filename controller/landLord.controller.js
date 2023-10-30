@@ -1,7 +1,6 @@
 const { LandlordModal } = require("../modal/landLord.modal");
 const multer = require("multer");
 const path = require("path");
-const { v4: uuidv4 } = require('uuid');
 const moment = require("moment");
 const filterLandlord= async(req,res)=>{
   try {
@@ -67,6 +66,7 @@ const postLandLord = async (req, res) => {
         }
         
         const date = moment().format("YYYY-MM-DD HH:mm:ss");
+        console.log(images);
         const newUser = {
             firstName,
             LastName,
@@ -147,10 +147,10 @@ const deleteLandlord =async(req,res)=>{
 // Multer configuration for file uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null,  "./images");
+        cb(null,  "images");
     },
     filename: function (req, file, cb) {
-        const uniqueSuffix = uuidv4() +"-"+ path.extname(file.originalname);
+        const uniqueSuffix =  path.extname(file.originalname);
         cb(null, uniqueSuffix);
     },
 });
