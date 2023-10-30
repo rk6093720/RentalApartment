@@ -147,7 +147,7 @@ const deleteLandlord =async(req,res)=>{
 // Multer configuration for file uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null,  "ImageFolder");
+        cb(null,  "./images");
     },
     filename: function (req, file, cb) {
         const uniqueSuffix = uuidv4() +"-"+ path.extname(file.originalname);
