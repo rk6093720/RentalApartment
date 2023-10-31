@@ -182,6 +182,7 @@ const Logout = async(req,res)=>{
        return res.status(500).json({ message: '3Error sending email confirmation' });
    }
 }
+
 module.exports={
     Login,
    forgetPassword,

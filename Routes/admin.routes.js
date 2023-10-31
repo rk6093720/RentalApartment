@@ -14,6 +14,7 @@ adminRoute.post("/reset-password/:id/:token",postResetPassword);
 adminRoute.post("/admin-data",adminData);
 adminRoute.get("/logout",Logout);
 
+
 module.exports={
     adminRoute
 }
