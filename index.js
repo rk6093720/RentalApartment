@@ -13,6 +13,9 @@ const { paymentRouter } = require('./Routes/payment.routes');
 const { vacateRouter } = require('./Routes/vacate.routes');
 const { systemRouter } = require('./Routes/system.routes');
 const { featureRoute } = require('./Routes/feature.routes');
+const { amenitiesRoute } = require('./Routes/amenities.routes');
+const { utilitiesRoute } = require('./Routes/utilities.routes');
+const { unitRoute } = require('./Routes/Unit.routes');
 const app = express();
 dotenv.config();
 const port = process.env.PORT || 8000;
@@ -29,7 +32,10 @@ app.use("/payment",paymentRouter);
 app.use("/tentants",tentantRouter);
 app.use("/leases",leaseRouter);
 app.use("/system",systemRouter);
-app.use("/properties", featureRoute)
+app.use("/properties", featureRoute);
+app.use("/amenities",amenitiesRoute);
+app.use("/utilities",utilitiesRoute);
+app.use("/unit",unitRoute)
 app.use("/vacatenotices", vacateRouter);
 app.get("/",(req,res)=>{
     res.send("Welcome to  Apartment Website")
