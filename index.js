@@ -11,12 +11,15 @@ const { leaseRouter } = require('./Routes/lease.routes');
 const { utilityRouter } = require('./Routes/utility.routes');
 const { paymentRouter } = require('./Routes/payment.routes');
 const { vacateRouter } = require('./Routes/vacate.routes');
+const { systemRouter } = require('./Routes/system.routes');
+const { featureRoute } = require('./Routes/feature.routes');
 const app = express();
 dotenv.config();
 const port = process.env.PORT || 8000;
 app.use(cors());
 app.use(express.json());
-app.use('/images', express.static("images"))
+app.use('/images', express.static("images"));
+app.use('/logo', express.static("logo"))
 app.use("/admin",adminRoute);
 app.use("/users",userRoute);
 app.use("/landlord",landLordRouter);
@@ -25,6 +28,8 @@ app.use("/utility",utilityRouter);
 app.use("/payment",paymentRouter);
 app.use("/tentants",tentantRouter);
 app.use("/leases",leaseRouter);
+app.use("/system",systemRouter);
+app.use("/properties", featureRoute)
 app.use("/vacatenotices", vacateRouter);
 app.get("/",(req,res)=>{
     res.send("Welcome to  Apartment Website")
