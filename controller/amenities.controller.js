@@ -3,7 +3,7 @@ const { AmenitiesModal } = require("../modal/amenities.modal");
 const getAmenities= async(req,res)=>{
     try {
         const users = await AmenitiesModal.find();
-        res.status(200).send({ Properties: users, status: "success" });
+        res.status(200).send({ Amenities: users, status: "success" });
     } catch (error) {
         console.error(error);
         res.status(500).send({ status: "error", message: "Internal server error" });
@@ -23,7 +23,7 @@ const postAmenities=async(req,res)=>{
         };
         const newProperties = new AmenitiesModal(newUser);
         await newProperties.save();
-        res.status(201).json({ status: 'success', AddProperties: newProperties });
+        res.status(201).json({ status: 'success', AddAmenities: newProperties });
     } catch (error) {
         console.error(error);
         res.status(500).json({ status: 'error', message: 'Internal server error' });
@@ -41,7 +41,7 @@ const putAmenities=async(req,res)=>{
     }
     try {
         await AmenitiesModal.findOneAndUpdate({ _id: id }, newProperties, { new: true });
-        res.status(200).send({ status: "success", msg: "edit successfully", editProperties: newProperties });
+        res.status(200).send({ status: "success", msg: "edit successfully", editAmenities: newProperties });
     } catch (error) {
         console.log(error);
         res.status(500).send({ msg: "something went wrong", status: "error" })
