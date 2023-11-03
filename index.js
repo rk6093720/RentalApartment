@@ -16,6 +16,7 @@ const { featureRoute } = require('./Routes/feature.routes');
 const { amenitiesRoute } = require('./Routes/amenities.routes');
 const { utilitiesRoute } = require('./Routes/utilities.routes');
 const { unitRoute } = require('./Routes/Unit.routes');
+const { amountRouter } = require('./Routes/amount.routes');
 const app = express();
 dotenv.config();
 const port = process.env.PORT || 8000;
@@ -35,6 +36,7 @@ app.use("/system",systemRouter);
 app.use("/properties", featureRoute);
 app.use("/amenities",amenitiesRoute);
 app.use("/utilities",utilitiesRoute);
+app.use("/amount",amountRouter)
 app.use("/unit",unitRoute)
 app.use("/vacatenotices", vacateRouter);
 app.get("/",(req,res)=>{
