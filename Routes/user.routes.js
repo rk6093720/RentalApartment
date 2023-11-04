@@ -6,7 +6,8 @@ userRoute.get("/", (req,res)=>{
     res.send("welcome to User Home Page")
 })
 userRoute.post("/signup",userRegister);
-userRoute.post("/login",userLogin)
+userRoute.post("/login",userLogin);
+
 module.exports={
     userRoute
 }
