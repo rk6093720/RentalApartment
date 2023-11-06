@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { postTentant, getTentant, editTentant, deleteTentant } = require("../controller/tentants.controller");
+const { getTentant, postTentant, editTentant, deleteTentant } = require("../controller/tetant.controller");
 const tentantsRouter = Router();
 
 

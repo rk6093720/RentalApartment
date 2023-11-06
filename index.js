@@ -19,7 +19,7 @@ const { unitRoute } = require('./Routes/Unit.routes');
 const { amountRouter } = require('./Routes/amount.routes');
 const { userRouter } = require('./Routes/userRole.routes');
 const { roleRouter } = require('./Routes/role.routes');
-const { tentantsRouter } = require('./Routes/tentants.routes');
+const { tentantsRouter } = require('./Routes/tetant.routes');
 const app = express();
 dotenv.config();
 const port = process.env.PORT || 8000;
@@ -34,7 +34,7 @@ app.use("/property",propertyRouter);
 app.use("/utility",utilityRouter);
 app.use("/payment",paymentRouter);
 app.use("/tentants",tentantRouter);
-app.use("/tentants", tentantsRouter)
+app.use("/tentantsSystem", tentantsRouter)
 app.use("/tentant",tentantsRouter);
 app.use("/leases",leaseRouter);
 app.use("/system",systemRouter);
