@@ -146,48 +146,58 @@ const postResetPassword = async (req, res) => {
        return res.json({ status: "Something Went Wrong" });
     }
 }
-const Logout = async(req,res)=>{
-    const { email } = req.body;
-    const {id}= req.params;
-   try {
-    const Isid = await AdminModal.find(id)
-    if(!Isid){
-        return res.status(404).json({ message: 'Admin not found' });
-    }
-    const logoutTime = new Date();
-    await UserSession.create({ id,email,logoutTime});
-    const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-              user:"rk6093720@gmail.com",
-             pass:"ufjdplisgfglmcga",
-        },
-    })
-       var mailOptions = {
-           from: email,
-           to: email,
-           subject: "Logout Confirmation",
-           text: "You have successfully logged out from our application",
-       };
+const Logout = async (req, res) => {
+    const { id } = req.params;
 
-       transporter.sendMail(mailOptions, function (error, info) {
-           if (error) {
-               console.log(error);
-               return res.status(500).json({ message: '1Error sending email confirmation' });
-           } else {
-               return res.status(200).json({ message: '2Logged out successfully and email sent' });
-           }
-       });
+    try {
+        // Assuming you have a UserSession model to track logout times
+        const logoutTime = new Date();
+
+        // Create a new UserSession document to record the logout time
+        const userSession = new UserSession({
+            id, // Assuming id is the user's ID
+            logoutTime,
+        });
+
+        // Save the UserSession document to your database
+        await userSession.save();
+
+        return res.status(200).json({ message: 'Logged out successfully' });
+    } catch (error) {
+        return res.status(500).json({ message: 'Error logging out' });
+    }
+};
+
+const postProfile= async(req,res)=>{
+   const {id} = req.params;
+   try {
+       const { password,firstName,lastname,country,state,city}=req?.body;
+       const admin ={
+        firstName,lastname,country,state,city,password
+       }
+        const adminData = await AdminModal.findById({_id:id,admin, new:true})
+        await adminData.save();
+        res.status(200).send({ adminData, status:"success"})
    } catch (error) {
-       return res.status(500).json({ message: '3Error sending email confirmation' });
+       res.status(500).send({  status: "error" })
    }
 }
 
+const getProfile = async (req, res) => {
+    try {
+        const adminData = await AdminModal.find()
+        res.status(200).send({ Admin:adminData, status: "success" })
+    } catch (error) {
+        res.status(500).send({ status: "error" })
+    }
+}
 module.exports={
     Login,
    forgetPassword,
     resetPassword,
     postResetPassword,
     adminData,
-    Logout
+    Logout,
+    postProfile,
+    getProfile
 }
