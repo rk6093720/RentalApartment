@@ -32,32 +32,32 @@ const Login = async(req,res)=>{
       return  res.status(500).send({ msg: "Internal Server Error" });
     }
 }
-const adminData=async(req,res)=>{
-    const { token } = req.body;
-    try {
-        const user = jwt.verify(token, jwtSecret, (err, res) => {
-            if (err) {
-                return "token expired";
-            }
-            return res;
-        });
-        console.log(user);
-        if (user == "token expired") {
-            return res.send({ status: "error", data: "token expired" });
-        }
+// const adminData=async(req,res)=>{
+//     const { token } = req.body;
+//     try {
+//         const user = jwt.verify(token, jwtSecret, (err, res) => {
+//             if (err) {
+//                 return "token expired";
+//             }
+//             return res;
+//         });
+//         console.log(user);
+//         if (user == "token expired") {
+//             return res.send({ status: "error", data: "token expired" });
+//         }
 
-        const userEmail = user.email;
-        AdminModal.find( userEmail )
-            .then((data) => {
-                res.send({ status: "success", data: data });
-            })
-            .catch((error) => {
-                res.send({ status: "error", data: error });
-            });
-    } catch (error) {
-        res.status(500).send({ status: "error", data: error });
-     }
-}
+//         const userEmail = user.email;
+//         AdminModal.find( userEmail )
+//             .then((data) => {
+//                 res.send({ status: "success", data: data });
+//             })
+//             .catch((error) => {
+//                 res.send({ status: "error", data: error });
+//             });
+//     } catch (error) {
+//         res.status(500).send({ status: "error", data: error });
+//      }
+// }
 const forgetPassword= async(req,res)=>{
     const { email } = req.body;
     try {
@@ -168,16 +168,16 @@ const Logout = async (req, res) => {
     }
 };
 
-const postProfile= async(req,res)=>{
-   const {id} = req.params;
+const putProfile= async(req,res)=>{
+    const {id}= req?.params;
+    const {  firstName, lastname, country, state, city } = req?.body;
    try {
-       const { password,firstName,lastname,country,state,city}=req?.body;
        const admin ={
-        firstName,lastname,country,state,city,password
+        firstName,lastname,country,state,city
        }
-        const adminData = await AdminModal.findById({_id:id,admin, new:true})
+        const adminData = await AdminModal.findOneAndUpdate({_id:id,admin, new:true})
         await adminData.save();
-        res.status(200).send({ adminData, status:"success"})
+        res.status(200).send({AddAdmin: adminData, status:"success"})
    } catch (error) {
        res.status(500).send({  status: "error" })
    }
@@ -185,7 +185,7 @@ const postProfile= async(req,res)=>{
 
 const getProfile = async (req, res) => {
     try {
-        const adminData = await AdminModal.find()
+        const adminData = await AdminModal.find();
         res.status(200).send({ Admin:adminData, status: "success" })
     } catch (error) {
         res.status(500).send({ status: "error" })
@@ -196,8 +196,8 @@ module.exports={
    forgetPassword,
     resetPassword,
     postResetPassword,
-    adminData,
+    // adminData,
     Logout,
-    postProfile,
+    putProfile,
     getProfile
 }

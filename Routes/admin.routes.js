@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { Login, forgetPassword, Logout, resetPassword, postResetPassword, adminData, postProfile, getProfile } = require("../controller/admin.controller");
+const { Login, forgetPassword, Logout, resetPassword, postResetPassword,  getProfile, putProfile } = require("../controller/admin.controller");
 const adminRoute = Router();
 
 adminRoute.get("/",(req,res)=>{
@@ -11,9 +11,9 @@ adminRoute.post("/login",Login);
 adminRoute.post("/forget-password",forgetPassword);
 adminRoute.get("/reset-password/:id/:token",resetPassword);
 adminRoute.post("/reset-password/:id/:token",postResetPassword);
-adminRoute.post("/admin-data",adminData);
+// adminRoute.post("/admin-data",adminData);
 adminRoute.get("/logout",Logout);
-adminRoute.put("/profile",postProfile);
+adminRoute.put("/profile/:id",putProfile);
 adminRoute.get("/profile-data",getProfile)
 
 module.exports={
