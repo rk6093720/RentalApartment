@@ -67,7 +67,7 @@ const forgetPassword= async(req,res)=>{
         }
         const secret = jwtSecret  + oldUser.password;
         const token = jwt.sign({ email: oldUser.email, id: oldUser._id },secret, {
-            expiresIn: "2m",
+            expiresIn: "15m",
         });
         const setUserToken = await AdminModal.findByIdAndUpdate({_id:oldUser._id},{verifyToken:token,new:true})
         const link = `http://localhost:3000/reset-password/${oldUser._id}/${token}`;
