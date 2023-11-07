@@ -20,6 +20,8 @@ const { amountRouter } = require('./Routes/amount.routes');
 const { userRouter } = require('./Routes/userRole.routes');
 const { roleRouter } = require('./Routes/role.routes');
 const { tentantsRouter } = require('./Routes/tetant.routes');
+const { leaseTypeRouter } = require('./Routes/leaseTypes.routes');
+const { extraRouter } = require('./Routes/extra.routes');
 const app = express();
 dotenv.config();
 const port = process.env.PORT || 8000;
@@ -37,6 +39,8 @@ app.use("/tentants",tentantRouter);
 app.use("/tentantsSystem", tentantsRouter)
 app.use("/tentant",tentantsRouter);
 app.use("/leases",leaseRouter);
+app.use("/system_lease",leaseTypeRouter);
+app.use("/system_extra_charge",extraRouter);
 app.use("/system",systemRouter);
 app.use("/properties", featureRoute);
 app.use("/amenities",amenitiesRoute);
