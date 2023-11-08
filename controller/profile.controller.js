@@ -1,16 +1,17 @@
 const { ProfileModal } = require("../modal/profile.modal");
 
 const postProfile = async (req, res) => {
-    const {email,password, firstName, lastname, country, state, city } = req?.body;
+    const {email,password, firstName, lastname, country, state, city } = req.body;
+    const profileData = {
+        email, password, firstName, lastname, country, state, city
+    }
     try {
-        const admin = {
-            email,password,firstName, lastname, country, state, city
-        }
-        const profile = await ProfileModal( admin)
+        const profile = await ProfileModal(profileData)
         await profile.save();
-        res.status(200).json({ AddProfile: profile, status: "success" })
+        res.status(200).send({ AddProfile: profile, status: "success" })
     } catch (error) {
-        res.status(500).json({ status: "error" })
+        console.log(error);
+        res.status(500).send({ status: "error" })
     }
 }
 

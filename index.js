@@ -48,7 +48,7 @@ app.use("/amenities",amenitiesRoute);
 app.use("/utilities",utilitiesRoute);
 app.use("/amount",amountRouter)
 app.use("/unit",unitRoute);
-app.use("/profile",profileRouter)
+app.use("/profile-data",profileRouter)
 app.use("/user-Role",userRouter);
 app.use("/role",roleRouter);
 app.use("/vacatenotices", vacateRouter);
