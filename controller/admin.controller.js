@@ -168,29 +168,7 @@ const Logout = async (req, res) => {
     }
 };
 
-const putProfile= async(req,res)=>{
-    const {id}= req?.params;
-    const {  firstName, lastname, country, state, city } = req?.body;
-   try {
-       const admin ={
-        firstName,lastname,country,state,city
-       }
-        const adminData = await AdminModal.findOneAndUpdate({_id:id,admin, new:true})
-        await adminData.save();
-        res.status(200).send({AddAdmin: adminData, status:"success"})
-   } catch (error) {
-       res.status(500).send({  status: "error" })
-   }
-}
 
-const getProfile = async (req, res) => {
-    try {
-        const adminData = await AdminModal.find();
-        res.status(200).send({ Admin:adminData, status: "success" })
-    } catch (error) {
-        res.status(500).send({ status: "error" })
-    }
-}
 module.exports={
     Login,
    forgetPassword,
@@ -198,6 +176,4 @@ module.exports={
     postResetPassword,
     // adminData,
     Logout,
-    putProfile,
-    getProfile
 }
