@@ -1,11 +1,11 @@
 const {Router} = require("express");
-const { getSystem, postSystem, putSystem, deleteSystem } = require("../controller/system.controller");
+const { getSystem, postSystem, putSystem, deleteSystem, upload } = require("../controller/system.controller");
 const systemRouter = Router();
 
 
 systemRouter.get("/read",getSystem)
 
-systemRouter.post("/create",postSystem);
+systemRouter.post("/create", upload,postSystem);
 
 systemRouter.put("/update/:id",putSystem);
 

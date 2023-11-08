@@ -49,6 +49,7 @@ const postSystem = async (req, res) => {
         color,
         language,
         address,
+        _id,
         website,
         postalAddress,
         postalCode,
@@ -66,7 +67,7 @@ const postSystem = async (req, res) => {
         }
 
         const date = moment().format("YYYY-MM-DD HH:mm:ss");
-        console.log(logos);
+        console.log(logos,"LOGO");
         const newUser = {
             companyName,
             email,
