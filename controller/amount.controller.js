@@ -39,7 +39,7 @@ const putAmount = async(req,res)=>{
         name,
         extraCharge,
         fixedCharge,
-        description } = req?.body;
+        description } = req.body;
     const newAmount = {
         payment,
         name,

@@ -1,6 +1,4 @@
 const { LeaseTypeModal } = require("../modal/leaseTypes.modal");
-
-
 const getLeaseTypes = async (req, res) => {
     try {
         const getNewLeaseTypes = await LeaseTypeModal.find()

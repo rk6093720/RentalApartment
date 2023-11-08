@@ -23,7 +23,7 @@ const postUtility=async(req,res)=>{
 }
 const putUtility = async (req, res) => {
     const { id } = req.params;
-    const { propertyname, utilityname, manual } = req?.body;
+    const { propertyname, utilityname, manual } = req.body;
     const newUtility = { propertyname, utilityname, manual }
     try {
         const newUtilityLand= await UtilityModal.findOneAndUpdate({ _id: id }, newUtility, { new: true })

@@ -25,7 +25,7 @@ const postPayment = async(req,res)=>{
 }
 const putPayment = async (req, res) => {
     const { id } = req.params;
-    const { paymentTentant, paymentLease, amount, paymentMethod, paymentDate, paidBy, referenceNumber, beingPaymentFor, extraNotes } = req?.body;
+    const { paymentTentant, paymentLease, amount, paymentMethod, paymentDate, paidBy, referenceNumber, beingPaymentFor, extraNotes } = req.body;
     const newPayment = {
         paymentTentant, paymentLease, amount, paymentMethod, paymentDate, paidBy, referenceNumber, beingPaymentFor, extraNotes
     }

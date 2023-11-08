@@ -107,7 +107,7 @@ const putSystem = async (req, res) => {
         postalCode,
         separator,
         separatorDot,
-        separatorDate, } = req?.body;
+        separatorDate, } = req.body;
     const newSystem = {
         companyName,
         email,

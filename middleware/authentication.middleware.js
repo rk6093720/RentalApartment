@@ -7,8 +7,8 @@ const authentication = (req, res, next) => {
     if (token) {
         jwt.verify(token, secretKey, (err, decoded) => {
             if (decoded) {
-                req.body._id = decoded?.user?._id;
-                req.body.email = decoded?.user?.email;
+                req.body._id = decoded.user._id;
+                req.body.email = decoded.user.email;
                 console.log("user decoded");
                 next();
             } else {

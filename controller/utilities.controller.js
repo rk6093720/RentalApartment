@@ -33,7 +33,7 @@ const putUtilities = async (req, res) => {
     const { id } = req.params;
     const { name,
         display,
-        description, } = req?.body;
+        description, } = req.body;
     const newUtilities = {
         name,
         display,

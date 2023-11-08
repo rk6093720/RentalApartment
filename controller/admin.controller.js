@@ -5,7 +5,7 @@ const jwtSecret= process.env.JWT_SECRET;
 const nodemailer=require("nodemailer");
 const Login = async(req,res)=>{
     try {
-        const { email, password } = req?.body;
+        const { email, password } = req.body;
         if (email === "admin@gmail.com") {
             const admin = await AdminModal.findOne({ email: "admin@gmail.com"})
             if (!admin) {

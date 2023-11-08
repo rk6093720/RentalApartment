@@ -39,7 +39,7 @@ const putUserRole = async(req,res)=>{
         firstName,
         lastName,
         email,
-        password } = req?.body;
+        password } = req.body;
     const newUserRole = {
         role,
         firstName,

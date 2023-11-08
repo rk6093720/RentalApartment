@@ -4,7 +4,7 @@ const path = require("path");
 const moment = require("moment");
 const filterLandlord= async(req,res)=>{
   try {
-    const {firstName,LastName,email,phone}= req?.query;
+    const {firstName,LastName,email,phone}= req.query;
     const search={};
     if(firstName){
         search.firstName={$regex:firstName,$options:"i"};
@@ -108,7 +108,7 @@ const updateLandlord=async(req,res)=>{
         address,
         registerDate,
         propertyName,
-        adharCard } = req?.body;
+        adharCard } = req.body;
         const newLandlord={
             firstName,
             LastName,

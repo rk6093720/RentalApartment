@@ -32,7 +32,7 @@ const putRole = async (req, res) => {
     const { id } = req.params;
     const { name,
         displayName,
-        checkbox } = req?.body;
+        checkbox } = req.body;
     const newRole = {
         name,
         displayName,

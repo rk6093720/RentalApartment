@@ -26,7 +26,7 @@ const postVacate=async(req,res)=>{
 
 const putVacate = async (req, res) => {
     const { id } = req.params;
-    const { vacateDate,vacateTentant,vacateLease,vacateProperty,vacateUnit,reason } = req?.body;
+    const { vacateDate,vacateTentant,vacateLease,vacateProperty,vacateUnit,reason } = req.body;
     const newVacate = { vacateDate,vacateTentant,vacateLease,vacateProperty,vacateUnit,reason }
     try {
         const newVacateLand = await VacateModal.findOneAndUpdate({ _id: id }, newVacate, { new: true })
