@@ -4,25 +4,15 @@ const bcrypt = require('bcrypt');
 const jwtSecret = process.env.JWT_SECRET;
 
 const userRegister = async(req,res)=>{
-    const { email, password, firstName, lastName, userType, adharCard,country,state,city,postalCode } = req?.body;
+    const { email,password,firstName,lastName,adharCard,address,country,state,city,postalCode } = req?.body;
     const encrypt = await bcrypt.hash(password, 10);
         try {
             const oldUser = await UserModal.findOne({ email: email })
             if (oldUser) {
-                return res.json({ error: "userExists" });
+                return res.json({ status: "userExists" });
             }
             const newUser = await UserModal.create({
-                firstName,
-                lastName,
-                email,
-                password: encrypt,
-                userType,
-                adharCard,
-                country,
-                state,
-                country,
-                postalCode
-
+                email, password:encrypt, firstName, lastName, adharCard, address, country, state, city, postalCode
             })
             await newUser.save();
             res.send({ msg: "signup successful!", status: "ok" });
