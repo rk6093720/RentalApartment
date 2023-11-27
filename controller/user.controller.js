@@ -15,10 +15,10 @@ const userRegister = async(req,res)=>{
                 email, password:encrypt, firstName, lastName, adharCard, address, country, state, city, postalCode
             })
             await newUser.save();
-            res.send({ msg: "signup successful!", status: "ok" });
+            res.send({ msg:"signup successful!", status:"ok" });
         } catch (err) {
             console.log(err.message);
-            res.status(400).send({ error: "signup failed" });
+            res.status(400).send({ error:"signup failed" });
         }
     
 }
@@ -27,7 +27,7 @@ const userLogin= async(req,res)=>{
         const { email, password } = req.body;
         let user = await UserModal.findOne({ email });
         if (!user) {
-            return res.status(401).send({ msg: "User not found" });
+            return res.status(401).send({ msg:"User not found" });
         }
         if (await bcrypt.compare(password, user.password)) {
             const token = jwt.sign({ email: user.email }, jwtSecret, {
