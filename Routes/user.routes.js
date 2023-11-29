@@ -7,7 +7,6 @@ userRoute.get("/", (req,res)=>{
 })
 userRoute.post("/signup",userRegister);
 userRoute.post("/login",userLogin);
-
 module.exports={
     userRoute
 }

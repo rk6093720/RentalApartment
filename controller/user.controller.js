@@ -9,16 +9,16 @@ const userRegister = async(req,res)=>{
         try {
             const oldUser = await UserModal.findOne({ email: email })
             if (oldUser) {
-                return res.json({ status: "userExists" });
+                return res.json({ status:"userExists" });
             }
             const newUser = await UserModal.create({
                 email, password:encrypt, firstName, lastName, adharCard, address, country, state, city, postalCode
             })
             await newUser.save();
-            res.send({ msg:"signup successful!", status:"ok" });
+            res.json({ msg:"signup successful!", status:"ok" });
         } catch (err) {
             console.log(err.message);
-            res.status(400).send({ error:"signup failed" });
+            res.status(400).json({ error:"signup failed" });
         }
     
 }
@@ -33,8 +33,21 @@ const userLogin= async(req,res)=>{
             const token = jwt.sign({ email: user.email }, jwtSecret, {
                 expiresIn: "15m",
             })
+            const data = {
+                _id:user._id,
+                email: user.email,
+                password: user.password,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                adharCard: user.adharCard,
+                address: user.address,
+                country: user.country,
+                state: user.state,
+                city: user.city,
+                postalCode: user.postalCode
+            }
             if (res.status(201)) {
-                return res.json({ status: "ok", data: token })
+                return res.json({ status: "ok", data:{ token, userData:data  }})
             } else {
                 return res.json({ error: "error" });
             }
@@ -45,7 +58,8 @@ const userLogin= async(req,res)=>{
         res.status(500).send({ msg: "Internal Server Error" });
     }
 }
+
 module.exports={
     userRegister,
-    userLogin,
+    userLogin
 }
