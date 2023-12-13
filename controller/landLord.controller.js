@@ -2,36 +2,76 @@ const { LandlordModal } = require("../modal/landLord.modal");
 const multer = require("multer");
 const path = require("path");
 const moment = require("moment");
-const filterLandlord= async(req,res)=>{
-  try {
-    const {firstName,LastName,email,phone}= req.query;
-    const search={};
-    if(firstName){
-        search.firstName={$regex:firstName,$options:"i"};
+const filterLandlord = async (req, res) => {
+    try {
+    //     const { firstName, lastName, email, phone,page,limit } = req.query;
+    //     const search = {};
+    //     if (firstName) {
+    //         search.firstName = { $regex: firstName, $options: "i" };
+    //     }
+    //     if (lastName) {
+    //         search.lastName = { $regex: lastName, $options: "i" };
+    //     }
+    //     if (email) {
+    //         search.email = { $regex: email, $options: "i" };
+    //     }
+    //     if (phone) {
+    //         search.phone = { $regex: phone, $options: "i" };
+    //     }
+
+    //     // Pagination
+    //     const pagination = req.query.page || page;
+    //     const limitation = req.query.limit || limit ; // Set a default limit, adjust as needed
+    //     const skip = (pagination - 1) * limitation;
+
+    //     // Sorting
+    //     const sortField = req.query.sortBy // Set a default field to sort by
+    //     const sortOrder = req.query.sortOrder || 'asc'; // Set a default sort order
+    //     const sort = { [sortField]: sortOrder === 'asc' ? 1 : -1 };
+
+    //     const searchLand = await LandlordModal.find(search)
+    //         .sort(sort)
+    //         .skip(skip)
+    //         .limit(limit);
+    //     const totalRecords = await LandlordModal.countDocuments(search);
+    //     const totalPages = Math.ceil(totalRecords / parseInt(limit));
+    //     const paginationInfo ={
+    //         page: parseInt(pagination),
+    //         limit: parseInt(limitation),
+    //         totalPages,
+    //         totalRecords,
+    //     }
+    //     res.status(200).send({ status: "success", land:{ searchLand , paginationInfo}, msg:"success" });
+    // } catch (error) {
+    //     console.log(error);
+    //     res.status(500).send({ status: "error" });
+    // }
+        const { page, limit, sortBy, sortOrder,status, ...filters } = req.query;
+        const skip = (page - 1) * limit;
+        const sort = {};
+        if (sortBy) sort[sortBy] = sortOrder === 'asc' ? 1 : -1;
+        const results = await LandlordModal.find(filters)
+            .sort(sort)
+            .skip(skip)
+            .limit(parseInt(limit));
+         const totalRecords = await LandlordModal.countDocuments(filters);
+        const totalPages = Math.ceil(totalRecords / parseInt(limit));
+         const paginationInfo = {
+            page: parseInt(page),
+            limit: parseInt(limit),
+            totalPages,
+            totalRecords,
+        };
+        res.json({ results, paginationInfo });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server Error');
     }
-    if(LastName){
-        search.LastName = { $regex: LastName, $options: "i" };
-    }
-    if(email){
-        search.email = { $regex: email, $options: "i" };
-    }
-    if(phone){
-        search.phone = { $regex: phone, $options: "i" };
-    }
-    const page = req.query.page || 1;
-    const limit = req.query.limit ;
-    
-    const searchLand = await LandlordModal.find(search)
-     console.log(searchLand);
-     res.status(200).send({status:"success",land:searchLand})
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({ status: "error"  })
-  }
-}
+};
+
 const getLandLord = async (req, res) => {
     try {
-        const users = await LandlordModal.find();
+        const users = await LandlordModal.find({status:true});
         res.status(200).send({ Landlords: users, status: "success" });
     } catch (error) {
         console.error(error);
@@ -55,6 +95,7 @@ const postLandLord = async (req, res) => {
         propertyName,
         countApartment,
         adharCard,
+        status,
         propertyCode
     } = req.body;
     try {
@@ -80,6 +121,7 @@ const postLandLord = async (req, res) => {
             propertyName,
             countApartment,
             adharCard,
+            status,
             document: images, // Store the unique filename
             propertyCode,
             registerDate: date,
@@ -108,6 +150,7 @@ const updateLandlord=async(req,res)=>{
         address,
         registerDate,
         propertyName,
+        status,
         adharCard } = req.body;
         const newLandlord={
             firstName,
@@ -117,6 +160,7 @@ const updateLandlord=async(req,res)=>{
             adharCard,
             propertyName,
             registerDate,
+            status,
             postalCode,
             phone,
             countApartment,
@@ -125,7 +169,7 @@ const updateLandlord=async(req,res)=>{
             city
         }
     try {
-        await LandlordModal.findOneAndUpdate({ _id: id },newLandlord,{new:true});
+        await LandlordModal.findOneAndUpdate({ _id: id, status },newLandlord,{new:true});
         res.status(200).send({status:"success",msg:"edit successfully",editLandlord:newLandlord});
     } catch (error) {
         console.log(error);

@@ -5,7 +5,7 @@ const jwtSecret= process.env.JWT_SECRET;
 const nodemailer=require("nodemailer");
 const Login = async(req,res)=>{
     try {
-        const { email, password } = req.body;
+        const { email, password,userType } = req.body;
         if (email === "admin@gmail.com") {
             const admin = await AdminModal.findOne({ email: "admin@gmail.com"})
             if (!admin) {
@@ -13,7 +13,7 @@ const Login = async(req,res)=>{
             const newAdmin = await AdminModal({
                 email,
                 password: encrypt,
-                userType: "admin", 
+                userType 
             });
             await newAdmin.save();
            }
@@ -21,8 +21,9 @@ const Login = async(req,res)=>{
                 const token = jwt.sign({ email: admin.email }, jwtSecret, {
                     expiresIn: "5m",
                 })
+                const role = admin.userType;
                 if (res.status(201)) {
-                    return res.json({ status: "success", data: token })
+                    return res.json({ status: "success", data: { token, role , email} })
                 }
             }
         }
@@ -32,32 +33,33 @@ const Login = async(req,res)=>{
       return  res.status(500).send({ msg: "Internal Server Error" });
     }
 }
-// const adminData=async(req,res)=>{
-//     const { token } = req.body;
-//     try {
-//         const user = jwt.verify(token, jwtSecret, (err, res) => {
-//             if (err) {
-//                 return "token expired";
-//             }
-//             return res;
-//         });
-//         console.log(user);
-//         if (user == "token expired") {
-//             return res.send({ status: "error", data: "token expired" });
-//         }
+const adminData=async(req,res)=>{
+    const { token } = req.body;
+    console.log(token)
+    try {
+        const user = jwt.verify(token, jwtSecret, (err, res) => {
+            if (err) {
+                return "token expired";
+            }
+            return res;
+        });
+        console.log(user);
+        if (user == "token expired") {
+            return res.send({ status: "error", data: "token expired" });
+        }
 
-//         const userEmail = user.email;
-//         AdminModal.find( userEmail )
-//             .then((data) => {
-//                 res.send({ status: "success", data: data });
-//             })
-//             .catch((error) => {
-//                 res.send({ status: "error", data: error });
-//             });
-//     } catch (error) {
-//         res.status(500).send({ status: "error", data: error });
-//      }
-// }
+        const userEmail = user.email;
+        AdminModal.find( userEmail )
+            .then((data) => {
+                res.send({ status: "success", data: data });
+            })
+            .catch((error) => {
+                res.send({ status: "error", data: error });
+            });
+    } catch (error) {
+        res.status(500).send({ status: "error", data: error });
+     }
+}
 const forgetPassword= async(req,res)=>{
     const { email } = req.body;
     try {
@@ -174,6 +176,6 @@ module.exports={
    forgetPassword,
     resetPassword,
     postResetPassword,
-    // adminData,
+    adminData,
     Logout,
 }

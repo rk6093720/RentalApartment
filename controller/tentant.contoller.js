@@ -3,6 +3,9 @@ const { TentantModal } = require("../modal/tentant.modal");
 const getTentant = async(req,res)=>{
     try {
         const getNewTentant = await TentantModal.find()
+        if(getNewTentant){
+            return res.send({status:"Tentant is Already exist"})
+        }
         res.status(200).send({ Tentant: getNewTentant, status: "success" });
     } catch (error) {
         console.log(error);
@@ -10,81 +13,17 @@ const getTentant = async(req,res)=>{
     }
 }
 const postTentant= async(req,res)=>{
-    const { business_name,
-        license_number,
-        tax_id,
-        business_address,
-        business_industry,
-        business_description,
-        employee_Status,
-        employee_position,
-        employee_phone,
-        employee_email,
-        employee_postalAddress,
-        employee_physicalAddress,
-        tentant_Type,
-        firstName,
-        lastName,
-        gender,
-        dob,
-        passportNumber,
-        martialStatus,
-        phone,
-        email,
-        country,
-        city,
-        postalCode,
-        postalAddress,
-        physicalAddress,
-        password,
-        kinName,
-        kinPhone,
-        kinRelation,
-        emergency_name,
-        emergency_phone,
-        emergency_email,
-        emergency_relation,
-        emergency_postalAddress,
-        emergency_physicalAddress }= req.body;
+    const { firstName,lastName,email,phone,dateOfBirth,address,employment,rentalHistory,references, creditScore,identification  }= req.body;
     const newTentant={
-        business_name,
-        license_number,
-        tax_id,
-        business_address,
-        business_industry,
-        business_description,
-        employee_Status,
-        employee_position,
-        employee_phone,
-        employee_email,
-        employee_postalAddress,
-        employee_physicalAddress,
-        tentant_Type,
-        firstName,
-        lastName,
-        gender,
-        dob,
-        passportNumber,
-        martialStatus,
-        phone,
-        email,
-        country,
-        city,
-        postalCode,
-        postalAddress,
-        physicalAddress,
-        password,
-        kinName,
-        kinPhone,
-        kinRelation,
-        emergency_name,
-        emergency_phone,
-        emergency_email,
-        emergency_relation,
-        emergency_postalAddress,
-        emergency_physicalAddress
+        firstName, lastName, email, phone, dateOfBirth, address, employment, rentalHistory, references, creditScore, identification 
     }
     try {
+        const existingTentant = _id
+            ? await TentantModal.findById(_id)
+            : await TentantModal.findOne({ email });
+        if (existingTentant) {
+            return res.status(400).json({ status: 'error', message: 'User already exists' });
+        }
         const post_request = await TentantModal(newTentant);
         await post_request.save();
         res.status(200).send({ AddTentant: post_request, status: "success" });
@@ -97,78 +36,10 @@ const postTentant= async(req,res)=>{
 const editTentant = async(req,res)=>{
     const {id} = req.params;
     const {
-        business_name,
-        license_number,
-        tax_id,
-        business_address,
-        business_industry,
-        business_description,
-        employee_Status,
-        employee_position,
-        employee_phone,
-        employee_email,
-        employee_postalAddress,
-        employee_physicalAddress,
-        tentant_Type,
-        firstName,
-        lastName,
-        gender,
-        dob,
-        passportNumber,
-        martialStatus,
-        phone,
-        email,
-        country,
-        city,
-        postalCode,
-        postalAddress,
-        physicalAddress,
-        kinName,
-        kinPhone,
-        kinRelation,
-        emergency_name,
-        emergency_phone,
-        emergency_email,
-        emergency_relation,
-        emergency_postalAddress,
-        emergency_physicalAddress
+        firstName, lastName, email, phone, dateOfBirth, address, employment, rentalHistory, references, creditScore, identification 
     } = req.body;
     const newTentant={
-        business_name,
-        license_number,
-        tax_id,
-        business_address,
-        business_industry,
-        business_description,
-        employee_Status,
-        employee_position,
-        employee_phone,
-        employee_email,
-        employee_postalAddress,
-        employee_physicalAddress,
-        tentant_Type,
-        firstName,
-        lastName,
-        gender,
-        dob,
-        passportNumber,
-        martialStatus,
-        phone,
-        email,
-        country,
-        city,
-        postalCode,
-        postalAddress,
-        physicalAddress,
-        kinName,
-        kinPhone,
-        kinRelation,
-        emergency_name,
-        emergency_phone,
-        emergency_email,
-        emergency_relation,
-        emergency_postalAddress,
-        emergency_physicalAddress
+        firstName, lastName, email, phone, dateOfBirth, address, employment, rentalHistory, references, creditScore, identification 
     }
     try {
         const newEditTentants= await TentantModal.findOneAndUpdate({_id:id},newTentant,{new:true})

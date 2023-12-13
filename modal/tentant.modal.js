@@ -1,41 +1,42 @@
 const mongoose = require("mongoose");
 const tentantSchema = new mongoose.Schema({
-    business_name: { type: String },
-    license_number: { type: String },
-    tax_id: { type: String },
-    business_address: { type: String },
-    business_industry: { type: String },
-    business_description: { type: String },
-    employee_Status: { type: String },
-    employee_position: { type: String },
-    employee_phone: { type: String, maxlength: 10 },
-    employee_email: { type: String },
-    employee_postalAddress: { type: String },
-    employee_physicalAddress: { type: String },
-    tentant_Type: { type: String },
-    firstName: { type: String },
-    lastName: { type: String },
-    gender: { type: String },
-    dob: { type: Date },
-    passportNumber: { type: String },
-    martialStatus: { type: String },
-    phone: { type: String, maxlength: 10 },
-    email: { type: String },
-    country: { type: String },
-    city: { type: String },
-    postalCode: { type: String, maxlength: 6 },
-    postalAddress: { type: String },
-    physicalAddress: { type: String },
-    password: { type: String },
-    kinName: { type: String },
-    kinPhone: { type: String, maxlength: 10 },
-    kinRelation: { type: String },
-    emergency_name: { type: String },
-    emergency_phone: { type: String, maxlength: 10 },
-    emergency_email: { type: String },
-    emergency_relation: { type: String },
-    emergency_postalAddress: { type: String },
-    emergency_physicalAddress: { type: String }
+            firstName: {type:String,required:true},
+            lastName: { type: String, required: true },
+            email: { type: String, required: true } ,
+            phone: { type: String, required: true , maxlength:10},
+           dateOfBirth: { type: Date, required: true ,default:Date.now},
+            address: {
+                street: { type: String, required: true },
+                city: { type: String, required: true },
+                state: { type: String, required: true },
+                country: { type: String, required: true },
+                zipCode: { type: String, required: true }
+            },
+            employment: {
+                employer: { type: String, required: true },
+                jobTitle: { type: String, required: true },
+                income: { type: String, required: true }
+            },
+            rentalHistory: [
+                {
+                    landlord: { type: String, required: true },
+                    property: { type: String, required: true },
+                    startDate:{type:Date, default:Date.now},
+                    endDate: {type:Date, default:Date.now},
+                    reasonForLeaving:{type:String,required:true}
+                }
+            ],
+            references: [
+                {
+                    name: { type: String, required: true },
+                    relationship: { type: String, required: true },
+                    phone: { type: String, required: true,maxlength:10 }
+                }
+            ],
+            creditScore: {type:String},
+            identification: {
+                aadhaarCard: {type:String,maxlength:12}
+            }
 
 })
 
