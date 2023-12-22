@@ -75,7 +75,7 @@ const OwnerLogin = async(req,res)=>{
                     return res.status(200).json({ status: "success", data: { token, role , email}, msg:"Admin has login here" })
              }
             else{
-                return res.status(401).json({ status: "error", error: `Not an ${role}` , msg:"if User and Admin is not login it is only for admin" });
+                return res.status(401).json({ status: "error", error: `Not an ${role}` , msg:" it is only for admin" });
              }
         }else{
         return  res.status(401).json({ status: "error", error: "InvAlid Password",msg:"Invalid Password" });  
@@ -104,7 +104,7 @@ const UserLogin = async(req,res)=>{
                     return res.status(200).json({ status: "success", data: { token, role , email},msg:"User has login here" })
              }
             else{
-                return res.status(401).json({ status: "error", error: `Not an ${role}` , msg:"if User and Admin is not login it is only for  user" });
+                return res.status(401).json({ status: "error", error: `Not an ${role}` , msg:" it is only for  user" });
              }
         }else{
             console.log("invaalid pwd")
@@ -160,7 +160,7 @@ const forgetPassword= async(req,res)=>{
             service: "gmail",
             auth: {
                 user:"rk6093720@gmail.com",
-                pass:"ufjdplisgfglmcga",
+                pass:"simjkcatymsckxcf",
             },
         });
    var mailOptions = {
