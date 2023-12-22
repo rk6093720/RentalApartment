@@ -1,6 +1,7 @@
 const { LandlordModal } = require("../modal/landLord.modal");
 const multer = require("multer");
 const path = require("path");
+const bcrypt = require("bcrypt");
 const moment = require("moment");
 const filterLandlord = async (req, res) => {
     try {

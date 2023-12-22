@@ -3,6 +3,7 @@ const jwt=require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const jwtSecret= process.env.JWT_SECRET;
 const nodemailer=require("nodemailer");
+const secret = process.env.ADMIN
 const Login = async(req,res)=>{
     try {
         const { email, password,userType } = req.body;
@@ -22,15 +23,96 @@ const Login = async(req,res)=>{
                     expiresIn: "5m",
                 })
                 const role = admin.userType;
-                if (res.status(201)) {
-                    return res.json({ status: "success", data: { token, role , email} })
+                if (token && role === "SuperAdmin") {
+                    return res.status(201).json({ status: "success", data: { token, role , email} })
                 }
+            }else{
+                return  res.status(401).json({ status: "error", error: "InvAlid Password" });  
             }
         }
-      return  res.json({ status: "error", error: "InvAlid Password" });  
     } catch (error) {
         console.error("Error in login:", error);
       return  res.status(500).send({ msg: "Internal Server Error" });
+    }
+}
+
+const OwnerSignUp= async(req,res)=>{
+    const {email,password,userType}= req.body;
+    try {
+        const owner = await AdminModal.findOne({email});
+        if(owner ){
+            return res.status(401).json({status:"Email is Already present",status:"error"})
+        }
+        const hashed = await bcrypt.hash(password,10);
+        const newOwner = await AdminModal({
+            email,
+            password:hashed,
+            userType
+        })
+        await newOwner.save();
+        return res.status(200).json({status:"success", data:{newOwner}})
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({status:"error",error})
+    }
+}
+const OwnerLogin = async(req,res)=>{
+    const {email,password}= req.body;
+    try {
+        if (!email || !password) {
+            return res.status(400).json({ status: "Error", msg: "Email and password are required" });
+        }
+        const login = await AdminModal.findOne({email})
+        if(!login){
+            return res.status(401).json({status:"Error", msg:"Email is Already Present"})
+        }
+        if(await bcrypt.compare(password,login.password)){
+            const token = jwt.sign({email: login.email}, secret,{
+                expiresIn:"5m"
+            })
+            const role = login.userType;
+            if ( role === "Admin" ) {
+                    return res.status(200).json({ status: "success", data: { token, role , email}, msg:"Admin has login here" })
+             }
+            else{
+                return res.status(401).json({ status: "error", error: `Not an ${role}` , msg:"if User and Admin is not login it is only for admin" });
+             }
+        }else{
+        return  res.status(401).json({ status: "error", error: "InvAlid Password",msg:"Invalid Password" });  
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({status:"Error",msg:"something went wrong"})
+    }
+}
+const UserLogin = async(req,res)=>{
+    const {email,password}= req.body;
+    try {
+        if (!email || !password) {
+            return res.status(400).json({ status: "Error", msg: "Email and password are required" });
+        }
+        const login = await AdminModal.findOne({email})
+        if(!login){
+            return res.status(401).json({status:"Error", msg:"Email is Already Present"})
+        }
+        if(await bcrypt.compare(password,login.password)){
+            const token = jwt.sign({email: login.email}, secret,{
+                expiresIn:"5m"
+            })
+            const role = login.userType;
+            if ( role === "User" ) {
+                    return res.status(200).json({ status: "success", data: { token, role , email},msg:"User has login here" })
+             }
+            else{
+                return res.status(401).json({ status: "error", error: `Not an ${role}` , msg:"if User and Admin is not login it is only for  user" });
+             }
+        }else{
+            console.log("invaalid pwd")
+        return  res.status(401).json({ status: "error", error: "InvAlid Password",msg:"Invalid Password" });  
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({status:"Error",msg:"something went wrong"})
     }
 }
 const adminData=async(req,res)=>{
@@ -178,4 +260,7 @@ module.exports={
     postResetPassword,
     adminData,
     Logout,
+    OwnerLogin,
+    OwnerSignUp,
+    UserLogin
 }

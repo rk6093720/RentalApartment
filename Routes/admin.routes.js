@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { Login, forgetPassword, Logout, resetPassword, postResetPassword, adminData } = require("../controller/admin.controller");
+const { Login, forgetPassword, Logout, resetPassword, postResetPassword, adminData, OwnerLogin, OwnerSignUp, UserLogin } = require("../controller/admin.controller");
 const { authenticationSuperAdmin } = require("../middleware/authentication.middleware");
 const adminRoute = Router();
 
@@ -9,6 +9,9 @@ adminRoute.get("/",(req,res)=>{
 })
 // adminRoute.post("/signup",Register)
 adminRoute.post("/login", Login);
+adminRoute.post("/owner-login", OwnerLogin);
+adminRoute.post("/owner-signup",OwnerSignUp);
+adminRoute.post("/user-login",UserLogin)
 adminRoute.post("/forget-password",forgetPassword);
 adminRoute.get("/reset-password/:id/:token",resetPassword);
 adminRoute.post("/reset-password/:id/:token",postResetPassword);

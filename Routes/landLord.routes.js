@@ -12,6 +12,8 @@ landLordRouter.put("/update/:id",updateLandlord);
 landLordRouter.delete("/remove/:id",deleteLandlord);
 //filter by the get request 
 landLordRouter.get("/land-filter",filterLandlord);
+// signup of landlord as admin
+
 module.exports={
     landLordRouter
 }
