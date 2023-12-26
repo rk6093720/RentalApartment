@@ -127,63 +127,81 @@ const adminData=async(req,res)=>{
         });
         console.log(user);
         if (user == "token expired") {
-            return res.send({ status: "error", data: "token expired" });
+            return res.status(401).json({ status: "error", data: "token expired" });
         }
 
         const userEmail = user.email;
         AdminModal.find( userEmail )
             .then((data) => {
-                res.send({ status: "success", data: data });
+                res.status(200).json({ status: "success", data: data });
             })
             .catch((error) => {
-                res.send({ status: "error", data: error });
+                res.status(401).json({ status: "error", data: error });
             });
     } catch (error) {
-        res.status(500).send({ status: "error", data: error });
+        res.status(500).json({ status: "error", data: error });
      }
 }
-const forgetPassword= async(req,res)=>{
+const forgetPassword = async (req, res) => {
     const { email } = req.body;
     try {
-        const oldUser = await AdminModal.findOne({email} );
+        const oldUser = await AdminModal.findOne({ email });
         if (!oldUser) {
-            return res.json({ status: "admin Not Exists!!" });
+            return res.status(401).json({ status: "admin Not Exists!!" });
         }
-        const secret = jwtSecret  + oldUser.password;
-        const token = jwt.sign({ email: oldUser.email, id: oldUser._id },secret, {
+
+        const secret = jwtSecret + oldUser.password;
+        const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, secret, {
             expiresIn: "15m",
         });
-        const setUserToken = await AdminModal.findByIdAndUpdate({_id:oldUser._id},{verifyToken:token,new:true})
+
+        const setUserToken = await AdminModal.findByIdAndUpdate(
+            { _id: oldUser._id },
+            { verifyToken: token, new: true }
+        );
+
         const link = `http://localhost:3000/reset-password/${oldUser._id}/${token}`;
-        if(setUserToken){
-        var transporter = nodemailer.createTransport({
-            service: "gmail",
-            auth: {
-                user:"rk6093720@gmail.com",
-                pass:"simjkcatymsckxcf",
-            },
-        });
-   var mailOptions = {
-            from:"rk6093720@gmail.com",
-            to: email,
-            subject: "Password Reset",
-            text: link,
-        };
-        transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-                console.log(error);
-                return res.status(401).json({message:"email not send"})
-            } else {
-                console.log("Email sent: " + info.response);
-                return res,staus(201).json({message:"email sent successfully"})
-            }
-        });
+
+        if (setUserToken) {
+            var transporter = nodemailer.createTransport({
+                service: "gmail",
+                auth: {
+                    user: "rk6093720@gmail.com",
+                    pass: "simjkcatymsckxcf",
+                },
+                tls: {
+                    rejectUnauthorized: false,
+                },
+            });
+
+            var mailOptions = {
+                from: "rk6093720@gmail.com",
+                to: email,
+                subject: "Password Reset",
+                text: link,
+            };
+
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    console.log(error);
+                    return res.status(401).json({ message: "email not send" });
+                } else {
+                    console.log("Email sent: " + info.response);
+                    return res.json({
+                        message: "email sent successfully",
+                        data: info.response,
+                        link,
+                        status: "success",
+                    });
+                }
+            });
+        }
+    } catch (e) {
+        console.error(e);
+        return res.status(500).json({ e: "do not sent on email", status: "error" });
     }
-     return   res.send({link, status:"success"});
-    } catch(e){
-        res.status(500).send({e:"do not sent on email",  status: "error" });
-    }
-}
+};
+
 // get request for reset password 
 const resetPassword= async(req,res)=>{
     const { id, token } = req.params;
@@ -191,14 +209,14 @@ const resetPassword= async(req,res)=>{
     // console.log(req.params);
     const oldUser = await AdminModal.findOne({_id: id, verifyToken: token });
     if (!oldUser) {
-        return res.json({ status: "Admin Not Exists!!" });
+        return res.status(401).json({ status: "Admin Not Exists!!" });
     }
     const secret = jwtSecret + oldUser.password;
     try {
         const verify = jwt.verify(token, secret);
-     return    res.send({email:verify.email,id:verify._id,status:"verified"})
+     return    res.status(200).json({email:verify.email,id:verify._id,status:"verified"})
     } catch (error) {
-     return   res.send("Not Verified");
+     return   res.status(500).json({msg:"Not Verified"});
     }
 }
 //post request of forget-password
@@ -207,7 +225,7 @@ const postResetPassword = async (req, res) => {
     const { password } = req.body;
    const oldUser = await AdminModal.findOne({_id: id ,verifyToken:token});
     if (!oldUser) {
-        return res.json({ status: "Admin Not Exists!!" });
+        return res.status(401).json({ status: "Admin Not Exists!!" });
     }
     const secret = jwtSecret + oldUser.password;
     try {
@@ -224,10 +242,10 @@ const postResetPassword = async (req, res) => {
             }
         );
 
-     return   res.send( { email: verify.email,verifyToken:verify.token,id:verify._id, status: "verified" });
+     return   res.status(200).json( { email: verify.email,verifyToken:verify.token,id:verify._id, status: "verified" });
     } catch (error) {
         console.log(error);
-       return res.json({ status: "Something Went Wrong" });
+       return res.status(500).json({ status: "Something Went Wrong" });
     }
 }
 const Logout = async (req, res) => {
