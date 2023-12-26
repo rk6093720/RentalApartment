@@ -8,7 +8,6 @@ const {adminRoute }= require("./Routes/admin.routes");
 const { userRoute } = require('./Routes/user.routes');
 const { landLordRouter } = require('./Routes/landLord.routes');
 const { propertyRouter } = require('./Routes/property.routes');
-const { tentantRouter } = require('./Routes/tentant.routes');
 const { leaseRouter } = require('./Routes/lease.routes');
 const { utilityRouter } = require('./Routes/utility.routes');
 const { paymentRouter } = require('./Routes/payment.routes');
@@ -21,10 +20,12 @@ const { unitRoute } = require('./Routes/Unit.routes');
 const { amountRouter } = require('./Routes/amount.routes');
 const { userRouter } = require('./Routes/userRole.routes');
 const { roleRouter } = require('./Routes/role.routes');
-const { tentantsRouter } = require('./Routes/tetant.routes');
 const { leaseTypeRouter } = require('./Routes/leaseTypes.routes');
 const { extraRouter } = require('./Routes/extra.routes');
 const { profileRouter } = require('./Routes/Profile.routes');
+const { tentantsRouter } = require('./Routes/tetant.routes');
+const { tentantRouter } = require('./Routes/tentant.routes');
+const { invoiceRouter } = require('./Routes/invoice.routes');
 const app = express();
 dotenv.config();
 const port = process.env.PORT || 8000;
@@ -46,9 +47,6 @@ app.use("/landlord",landLordRouter);
 app.use("/property",propertyRouter);
 app.use("/utility",utilityRouter);
 app.use("/payment",paymentRouter);
-app.use("/tentants",tentantRouter);
-app.use("/tentantsSystem", tentantsRouter)
-app.use("/tentant",tentantsRouter);
 app.use("/leases",leaseRouter);
 app.use("/system_lease",leaseTypeRouter);
 app.use("/system_extra_charge",extraRouter);
@@ -60,8 +58,11 @@ app.use("/amount",amountRouter)
 app.use("/unit",unitRoute);
 app.use("/profile-data",profileRouter)
 app.use("/user-Role",userRouter);
+app.use("/tetantsRouter",tentantsRouter);
+app.use("/tentants",tentantRouter)
 app.use("/role",roleRouter);
 app.use("/vacatenotices", vacateRouter);
+app.use("/invoice",invoiceRouter)
 app.get("/",(req,res)=>{
     res.send("Welcome to  Apartment Website")
 })

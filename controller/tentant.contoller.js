@@ -3,9 +3,6 @@ const { TentantModal } = require("../modal/tentant.modal");
 const getTentant = async(req,res)=>{
     try {
         const getNewTentant = await TentantModal.find()
-        if(getNewTentant){
-            return res.send({status:"Tentant is Already exist"})
-        }
         res.status(200).send({ Tentant: getNewTentant, status: "success" });
     } catch (error) {
         console.log(error);
