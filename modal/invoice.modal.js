@@ -6,6 +6,8 @@ const invoiceSchema = new mongoose.Schema({
    period:{type:String,required:true},
    totalAmount:{type:String,required:true},
    payment:{type:String,required:true},
+   month:{type:String,required:true},
+   year:{type:String,required:true},
    rent:{type:String,required:true},
 })
 const InvoiceModal = mongoose.model("invoice", invoiceSchema);

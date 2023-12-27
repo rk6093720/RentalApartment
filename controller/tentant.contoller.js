@@ -14,6 +14,7 @@ const postTentant= async(req,res)=>{
     const newTentant={
         firstName, lastName, email, phone, dateOfBirth, address, employment, rentalHistory, references, creditScore, identification 
     }
+    const {_id}= req.params;
     try {
         const existingTentant = _id
             ? await TentantModal.findById(_id)
