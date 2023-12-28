@@ -34,7 +34,7 @@ const putInvoice = async(req,res)=>{
         invoice,date,roomType,period,totalAmount,payment,rent,month,year
     }
     try {
-        const editInvoice = await InvoiceModal.findByIdAndUpdate({_id:id,newInvoice, new:true});
+        const editInvoice = await InvoiceModal.findOneAndUpdate({_id:id},newInvoice, {new:true});
         return res.status(200).json({status:"Success", msg:"edited Successfully",editInvoice})
     } catch (error) {
     return res.status(500).json({status:"error",msg:"not edited"})
@@ -43,7 +43,7 @@ const putInvoice = async(req,res)=>{
 const deleteInvoice= async(req,res)=>{
     const {id}= req.params;
     try {
-        const invoice = await InvoiceModal.findByIdAndDelete({_id:id});
+        const invoice = await InvoiceModal.findOneAndDelete({_id:id});
         return res.status(200).json({status:"success", msg:"deleted Successfully",invoice})
     } catch (error) {
         return res.status(500).json({status:"error",msg:"not deleted"})
